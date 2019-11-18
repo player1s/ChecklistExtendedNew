@@ -1,13 +1,4 @@
 <resources>
     <string name="app_name">ChecklistExtended</string>
-<<<<<<< HEAD
-    <string name="title_home">Timeline</string>
-    <string name="title_dashboard">Everydays todo</string>
-    <string name="title_notifications">week planner</string>
-    <string name="title_activity_buttonteszt">buttonteszt</string>
-=======
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
->>>>>>> parent of 95d9ec7... firebase
+    <string name="action_settings">Settings</string>
 </resources>
