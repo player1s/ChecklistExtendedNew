@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "941539455271",
+    "firebase_url": "https://checklist-extended.firebaseio.com",
+    "project_id": "checklist-extended",
+    "storage_bucket": "checklist-extended.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:941539455271:android:32ef7b5618a23c3e563902",
+        "android_client_info": {
+          "package_name": "com.example.checklistextended"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "941539455271-n2rifp1p50sp9doilv2snmf8qhhbau29.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDFnvDq-W45GfZiMAFWNEBuStf0h7UQnbo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "941539455271-n2rifp1p50sp9doilv2snmf8qhhbau29.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
