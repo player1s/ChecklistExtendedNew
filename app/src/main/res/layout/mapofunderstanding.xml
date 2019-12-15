@@ -22,25 +22,25 @@
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/btnTimeLineInTodos"
+                android:id="@+id/btnTimeLineInMap"
                 android:text="Timeline"/>
-
-            <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/btnTodosInTodos"
-            android:text="Todos"/>
 
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/btnMapInTodos"
+                android:id="@+id/btnTodosInMap"
+                android:text="Todos"/>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/btnMapInMap"
                 android:text="Map"/>
 
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/btnWeekInTodos"
+                android:id="@+id/btnWeekInMap"
                 android:text="Week"/>
         </androidx.appcompat.widget.Toolbar>
 
