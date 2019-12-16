@@ -19,6 +19,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".mapOfUnderstanding"
+            android:label="@string/app_name"></activity>
+        <activity
+            android:name=".timeLine"
+            android:label="@string/app_name"></activity>
+        <activity
+            android:name=".weekPlan"
+            android:label="@string/app_name"></activity>
+
+
     </application>
 
 </manifest>

@@ -1,5 +1,6 @@
 package com.example.checklistextended;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -22,10 +23,14 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+
+import static android.provider.AlarmClock.EXTRA_MESSAGE;
 
 public class MainActivity extends AppCompatActivity implements mouRWAdapter.ItemClickListener {
 
@@ -50,6 +55,46 @@ public class MainActivity extends AppCompatActivity implements mouRWAdapter.Item
         adapter = new mouRWAdapter(this, animalNames);
         adapter.setClickListener(this);
         recyclerView.setAdapter(adapter);
+
+
+
+
+        //set up the buttons on the toolbar
+        Button btnTimeLineInTodos = (Button) findViewById(R.id.btnTimeLineInTodos);
+        btnTimeLineInTodos.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), timeLine.class);
+                startActivity(intent);
+            }
+        });
+
+        //set up the buttons on the toolbar
+        Button btnTodosInTodos = (Button) findViewById(R.id.btnTodosInTodos);
+        btnTodosInTodos.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+
+            }
+        });
+
+        //set up the buttons on the toolbar
+        Button btnMapInTodos = (Button) findViewById(R.id.btnMapInTodos);
+        btnMapInTodos.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), mapOfUnderstanding.class);
+                startActivity(intent);
+            }
+        });
+
+        //set up the buttons on the toolbar
+        Button btnWeekInTodos = (Button) findViewById(R.id.btnWeekInTodos);
+        btnWeekInTodos.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), weekPlan.class);
+                startActivity(intent);
+            }
+        });
+
+
     }
 
     @Override
