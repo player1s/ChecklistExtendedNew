@@ -85,7 +85,7 @@ public class mapOfUnderstanding extends AppCompatActivity {
 
                 // Add rule to layout parameters
                 // Add the ImageView below to Button
-                //lp.addRule(CoordinatorLayout., fabInMap.getId());
+                lp.setMargins(450,450,50,50);
 
                 // Add layout parameters to ImageView
                 iv.setLayoutParams(lp);
