@@ -6,9 +6,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -25,6 +27,7 @@ public class mapOfUnderstanding extends AppCompatActivity {
 
         Canvas canvas = new Canvas();
 
+        final CoordinatorLayout coordinatorLayoutInMap = (CoordinatorLayout) findViewById(R.id.coordinatorlayoutForMap);
 
         //set up the buttons on the toolbar
         Button btnTimeLineInMap = (Button) findViewById(R.id.btnTimeLineInMap);
@@ -61,12 +64,34 @@ public class mapOfUnderstanding extends AppCompatActivity {
             }
         });
 
-        FloatingActionButton fabInMap = (FloatingActionButton) findViewById(R.id.fabInMap);
+        final FloatingActionButton fabInMap = (FloatingActionButton) findViewById(R.id.fabInMap);
         fabInMap.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 MyDrawable rectangle = new MyDrawable();
+
+
                 ImageView image = findViewById(R.id.my_image_view);
                 image.setImageDrawable(rectangle);
+
+
+
+                ImageView iv = new ImageView(getApplicationContext());
+
+                // Set an image for ImageView
+                iv.setImageDrawable(getDrawable(R.drawable.concept));
+
+                // Create layout parameters for ImageView
+                CoordinatorLayout.LayoutParams lp = new CoordinatorLayout.LayoutParams(CoordinatorLayout.LayoutParams.WRAP_CONTENT, CoordinatorLayout.LayoutParams.WRAP_CONTENT);
+
+                // Add rule to layout parameters
+                // Add the ImageView below to Button
+                //lp.addRule(CoordinatorLayout., fabInMap.getId());
+
+                // Add layout parameters to ImageView
+                iv.setLayoutParams(lp);
+
+                // Finally, add the ImageView to layout
+                coordinatorLayoutInMap.addView(iv);
             }
         });
 
