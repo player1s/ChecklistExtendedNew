@@ -43,10 +43,16 @@
                 android:id="@+id/btnWeekInMap"
                 android:text="Week"/>
         </androidx.appcompat.widget.Toolbar>
-
     </com.google.android.material.appbar.AppBarLayout>
 
-    <include layout="@layout/content_main" />
+    <ImageView
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:id="@+id/my_image_view"
+        android:background="@drawable/concept"
+        />
+
+   <!-- <include layout="@layout/content_main" /> -->
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
