@@ -45,14 +45,15 @@
         </androidx.appcompat.widget.Toolbar>
     </com.google.android.material.appbar.AppBarLayout>
 
-    <ImageView
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:id="@+id/my_image_view"
-        android:background="@drawable/concept"
-        />
+    <!-- <include layout="@layout/content_main" /> -->
 
-   <!-- <include layout="@layout/content_main" /> -->
+    <ImageView
+        android:id="@+id/my_image_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/concept"
+        android:layout_marginLeft="60dp"
+        android:layout_marginTop="60dp"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
