@@ -26,7 +26,7 @@ import java.util.ArrayList;
 public class mapOfUnderstanding extends AppCompatActivity {
 
     //---------------------------START: DRAGGING THINGS----------------------
-    ImageView img;
+    ImageView ivShadow;
     String msg;
     private CoordinatorLayout.LayoutParams layoutParams;
     //---------------------------END: DRAGGING THINGS----------------------
@@ -78,15 +78,9 @@ public class mapOfUnderstanding extends AppCompatActivity {
         final FloatingActionButton fabInMap = (FloatingActionButton) findViewById(R.id.fabInMap);
         fabInMap.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                MyDrawable rectangle = new MyDrawable();
-
-
-                ImageView image = findViewById(R.id.my_image_view);
-                image.setImageDrawable(rectangle);
-
-
 
                 ImageView iv = new ImageView(getApplicationContext());
+
 
                 // Set an image for ImageView
                 iv.setImageDrawable(getDrawable(R.drawable.concept));
@@ -102,82 +96,77 @@ public class mapOfUnderstanding extends AppCompatActivity {
 
                 // Finally, add the ImageView to layout
                 coordinatorLayoutInMap.addView(iv);
-            }
-        });
+                ivShadow = iv;
 
-        //---------------------------START: DRAGGING THINGS FUNCTIONALITY----------------------
+                //---------------------------START: DRAGGING THINGS FUNCTIONALITY----------------------
 
-        img=(ImageView)findViewById(R.id.my_image_view);
+                //img=(ImageView)findViewById(R.id.my_image_view);
 
-        img.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                Log.d(msg, "About to start drag");
-                v.setTag(v);
-                ClipData.Item item = new ClipData.Item(String.valueOf(v.getTag()));
-                String[] mimeTypes = {ClipDescription.MIMETYPE_TEXT_PLAIN};
+                iv.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+                        Log.d(msg, "About to start drag");
+                        v.setTag(v);
+                        ClipData.Item item = new ClipData.Item(String.valueOf(v.getTag()));
+                        String[] mimeTypes = {ClipDescription.MIMETYPE_TEXT_PLAIN};
 
-                ClipData dragData = new ClipData(v.getTag().toString(),mimeTypes, item);
-                View.DragShadowBuilder myShadow = new View.DragShadowBuilder(img);
+                        ClipData dragData = new ClipData(v.getTag().toString(),mimeTypes, item);
+                        View.DragShadowBuilder myShadow = new View.DragShadowBuilder(ivShadow);
 
-                v.startDrag(dragData,myShadow,null,0);
-                return true;
-            }
-        });
+                        v.startDrag(dragData,myShadow,null,0);
+                        return true;
+                    }
+                });
 
-        img.setOnDragListener(new View.OnDragListener() {
-            @Override
-            public boolean onDrag(View v, DragEvent event) {
-                switch(event.getAction()) {
-                    case DragEvent.ACTION_DRAG_STARTED:
-                        layoutParams = (CoordinatorLayout.LayoutParams)v.getLayoutParams();
-                        Log.d(msg, "Action is DragEvent.ACTION_DRAG_STARTED");
+                iv.setOnDragListener(new View.OnDragListener() {
+                    @Override
+                    public boolean onDrag(View v, DragEvent event) {
+                        switch(event.getAction()) {
+                            case DragEvent.ACTION_DRAG_STARTED:
+                                layoutParams = (CoordinatorLayout.LayoutParams)v.getLayoutParams();
+                                Log.d(msg, "Action is DragEvent.ACTION_DRAG_STARTED");
 
-                        // Do nothing
-                        break;
+                                // Do nothing
+                                break;
 
-                    case DragEvent.ACTION_DRAG_ENTERED:
-                        Log.d(msg, "Action is DragEvent.ACTION_DRAG_ENTERED");
-                        int x_cord = (int) event.getX();
-                        int y_cord = (int) event.getY();
-                        break;
+                            case DragEvent.ACTION_DRAG_ENTERED:
+                                Log.d(msg, "Action is DragEvent.ACTION_DRAG_ENTERED");
+                                int x_cord = (int) event.getX();
+                                int y_cord = (int) event.getY();
+                                break;
 
-                    case DragEvent.ACTION_DRAG_EXITED :
-                        Log.d(msg, "Action is DragEvent.ACTION_DRAG_EXITED");
-                        x_cord = (int) event.getX();
-                        y_cord = (int) event.getY();
-                        layoutParams.leftMargin = x_cord;
-                        layoutParams.topMargin = y_cord;
-                        v.setLayoutParams(layoutParams);
-                        break;
+                            case DragEvent.ACTION_DRAG_EXITED :
+                                Log.d(msg, "Action is DragEvent.ACTION_DRAG_EXITED");
 
-                    case DragEvent.ACTION_DRAG_LOCATION  :
-                        Log.d(msg, "Action is DragEvent.ACTION_DRAG_LOCATION");
-                        x_cord = (int) event.getX();
-                        y_cord = (int) event.getY();
-                        break;
+                                break;
 
-                    case DragEvent.ACTION_DRAG_ENDED   :
-                        Log.d(msg, "Action is DragEvent.ACTION_DRAG_ENDED");
+                            case DragEvent.ACTION_DRAG_LOCATION  :
+                                Log.d(msg, "Action is DragEvent.ACTION_DRAG_LOCATION");
+                                x_cord = (int) event.getX();
+                                y_cord = (int) event.getY();
+                                break;
 
-                        x_cord = (int) event.getX();
-                        y_cord = (int) event.getY();
-                        layoutParams.leftMargin = x_cord;
-                        layoutParams.topMargin = y_cord;
-                        v.setLayoutParams(layoutParams);
-                        // Do nothing
-                        break;
+                            case DragEvent.ACTION_DRAG_ENDED   :
+                                Log.d(msg, "Action is DragEvent.ACTION_DRAG_ENDED");
 
-                    case DragEvent.ACTION_DROP:
-                        Log.d(msg, "ACTION_DROP event");
+                                x_cord = (int) event.getX();
+                                y_cord = (int) event.getY();
+                                layoutParams.leftMargin = x_cord;
+                                layoutParams.topMargin = y_cord;
+                                v.setLayoutParams(layoutParams);
+                                // Do nothing
+                                break;
 
-                        // Do nothing
-                        break;
-                    default: break;
-                }
-                return true;
-            }
-        });
+                            case DragEvent.ACTION_DROP:
+                                Log.d(msg, "ACTION_DROP event");
+
+                                // Do nothing
+                                break;
+                            default: break;
+                        }
+                        return true;
+                    }
+                });
 /*
         img.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -197,7 +186,12 @@ public class mapOfUnderstanding extends AppCompatActivity {
 
  */
 
-        //---------------------------END: DRAGGING THINGS FUNCTIONALITY----------------------
+                //---------------------------END: DRAGGING THINGS FUNCTIONALITY----------------------
+
+            }
+        });
+
+
     }
 
 }
