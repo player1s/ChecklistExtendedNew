@@ -112,7 +112,9 @@ public class mapOfUnderstanding extends AppCompatActivity {
         img.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                ClipData.Item item = new ClipData.Item((CharSequence)v.getTag());
+                Log.d(msg, "About to start drag");
+                v.setTag(v);
+                ClipData.Item item = new ClipData.Item(String.valueOf(v.getTag()));
                 String[] mimeTypes = {ClipDescription.MIMETYPE_TEXT_PLAIN};
 
                 ClipData dragData = new ClipData(v.getTag().toString(),mimeTypes, item);
@@ -158,6 +160,11 @@ public class mapOfUnderstanding extends AppCompatActivity {
                     case DragEvent.ACTION_DRAG_ENDED   :
                         Log.d(msg, "Action is DragEvent.ACTION_DRAG_ENDED");
 
+                        x_cord = (int) event.getX();
+                        y_cord = (int) event.getY();
+                        layoutParams.leftMargin = x_cord;
+                        layoutParams.topMargin = y_cord;
+                        v.setLayoutParams(layoutParams);
                         // Do nothing
                         break;
 
@@ -171,7 +178,7 @@ public class mapOfUnderstanding extends AppCompatActivity {
                 return true;
             }
         });
-
+/*
         img.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -187,6 +194,8 @@ public class mapOfUnderstanding extends AppCompatActivity {
                 }
             }
         });
+
+ */
 
         //---------------------------END: DRAGGING THINGS FUNCTIONALITY----------------------
     }
