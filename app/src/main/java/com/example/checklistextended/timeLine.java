@@ -87,6 +87,7 @@ public class timeLine extends AppCompatActivity implements mouRWAdapter.ItemClic
 
     @Override
     public void onItemClick(View view, int position) {
-        Toast.makeText(this, "You clicked " + adapter.getItem(position) + " on row number " + position, Toast.LENGTH_SHORT).show();
-    }
+        Intent intent = new Intent(view.getContext(), Goal.class);
+        startActivity(intent);
+        }
 }
