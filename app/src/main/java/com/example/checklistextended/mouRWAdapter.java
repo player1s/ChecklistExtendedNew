@@ -74,5 +74,15 @@ public class mouRWAdapter extends RecyclerView.Adapter<mouRWAdapter.ViewHolder> 
         public interface ItemClickListener {
             void onItemClick(View view, int position);
         }
+
+    public void newAddeddata(String company_name){
+            /*
+        NewleadsPOJO newValue=new NewleadsPOJO();
+        newValue.setLeads_company(company_name);
+
+             */
+        mData.add("new");
+        notifyDataSetChanged();
+    }
     }
 

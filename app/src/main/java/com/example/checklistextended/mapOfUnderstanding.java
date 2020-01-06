@@ -79,7 +79,11 @@ public class mapOfUnderstanding extends AppCompatActivity {
         fabInMap.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
-                ImageView iv = new ImageView(getApplicationContext());
+                final ImageView iv = new ImageView(getApplicationContext());
+                ImageView iv1 = (ImageView)findViewById(R.id.my_image_view);
+                ImageView iv2 = (ImageView)findViewById(R.id.my_image_view2);
+                int generatedID = View.generateViewId();
+                iv.setTag(generatedID);
 
 
                 // Set an image for ImageView
@@ -100,13 +104,12 @@ public class mapOfUnderstanding extends AppCompatActivity {
 
                 //---------------------------START: DRAGGING THINGS FUNCTIONALITY----------------------
 
-                //img=(ImageView)findViewById(R.id.my_image_view);
+                //iv=(ImageView)findViewById(R.id.my_image_view);
 
                 iv.setOnLongClickListener(new View.OnLongClickListener() {
                     @Override
                     public boolean onLongClick(View v) {
-                        Log.d(msg, "About to start drag");
-                        v.setTag(v);
+                        Log.d(msg, "About to start drag of iv");
                         ClipData.Item item = new ClipData.Item(String.valueOf(v.getTag()));
                         String[] mimeTypes = {ClipDescription.MIMETYPE_TEXT_PLAIN};
 
@@ -147,7 +150,7 @@ public class mapOfUnderstanding extends AppCompatActivity {
                                 break;
 
                             case DragEvent.ACTION_DRAG_ENDED   :
-                                Log.d(msg, "Action is DragEvent.ACTION_DRAG_ENDED");
+                                Log.d(msg, "Action is DragEvent.ACTION_DRAG_ENDED of iv");
 
                                 x_cord = (int) event.getX();
                                 y_cord = (int) event.getY();
@@ -155,6 +158,144 @@ public class mapOfUnderstanding extends AppCompatActivity {
                                 layoutParams.topMargin = y_cord;
                                 v.setLayoutParams(layoutParams);
                                 // Do nothing
+                                break;
+
+                            case DragEvent.ACTION_DROP:
+                                Log.d(msg, "ACTION_DROP event");
+
+                                // Do nothing
+                                break;
+                            default: break;
+                        }
+                        return true;
+                    }
+                });
+
+                iv1.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+                        if (v.getId( )== R.id.my_image_view) {
+                            Log.d(msg, "About to start drag of iv1");
+                            ClipData.Item item = new ClipData.Item(String.valueOf(v.getTag()));
+                            String[] mimeTypes = {ClipDescription.MIMETYPE_TEXT_PLAIN};
+
+                            ClipData dragData = new ClipData(String.valueOf(v.getId()), mimeTypes, item);
+                            View.DragShadowBuilder myShadow = new View.DragShadowBuilder(ivShadow);
+
+                            v.startDrag(dragData, myShadow, null, 0);
+                        }
+                        return true;
+                    }
+                });
+
+                iv1.setOnDragListener(new View.OnDragListener() {
+                    @Override
+                    public boolean onDrag(View v, DragEvent event) {
+                        switch(event.getAction()) {
+                            case DragEvent.ACTION_DRAG_STARTED:
+                                layoutParams = (CoordinatorLayout.LayoutParams)v.getLayoutParams();
+                                Log.d(msg, "Action is DragEvent.ACTION_DRAG_STARTED");
+
+                                // Do nothing
+                                break;
+
+                            case DragEvent.ACTION_DRAG_ENTERED:
+                                Log.d(msg, "Action is DragEvent.ACTION_DRAG_ENTERED");
+                                int x_cord = (int) event.getX();
+                                int y_cord = (int) event.getY();
+                                break;
+
+                            case DragEvent.ACTION_DRAG_EXITED :
+                                Log.d(msg, "Action is DragEvent.ACTION_DRAG_EXITED");
+
+                                break;
+
+                            case DragEvent.ACTION_DRAG_LOCATION  :
+                                Log.d(msg, "Action is DragEvent.ACTION_DRAG_LOCATION");
+                                x_cord = (int) event.getX();
+                                y_cord = (int) event.getY();
+                                break;
+
+                            case DragEvent.ACTION_DRAG_ENDED   :
+                                if (v.getId( )== R.id.my_image_view) {
+                                    Log.d(msg, "Action is DragEvent.ACTION_DRAG_ENDED of iv1");
+
+                                    x_cord = (int) event.getX();
+                                    y_cord = (int) event.getY();
+                                    layoutParams.leftMargin = x_cord;
+                                    layoutParams.topMargin = y_cord;
+                                    v.setLayoutParams(layoutParams);
+                                }
+                                // Do nothing
+                                break;
+
+                            case DragEvent.ACTION_DROP:
+                                Log.d(msg, "ACTION_DROP event");
+
+                                // Do nothing
+                                break;
+                            default: break;
+                        }
+                        return true;
+                    }
+                });
+
+                iv2.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+                        if (v.getId( )== R.id.my_image_view2) {
+                            Log.d(msg, "About to start drag of iv2");
+                            ClipData.Item item = new ClipData.Item(String.valueOf(v.getTag()));
+                            String[] mimeTypes = {ClipDescription.MIMETYPE_TEXT_PLAIN};
+
+                            ClipData dragData = new ClipData(String.valueOf(v.getId()), mimeTypes, item);
+                            View.DragShadowBuilder myShadow = new View.DragShadowBuilder(ivShadow);
+
+                            v.startDrag(dragData, myShadow, null, 0);
+                        }
+                        return true;
+                    }
+                });
+
+                iv2.setOnDragListener(new View.OnDragListener() {
+                    @Override
+                    public boolean onDrag(View v, DragEvent event) {
+                        switch(event.getAction()) {
+                            case DragEvent.ACTION_DRAG_STARTED:
+                                layoutParams = (CoordinatorLayout.LayoutParams)v.getLayoutParams();
+                                Log.d(msg, "Action is DragEvent.ACTION_DRAG_STARTED");
+
+                                // Do nothing
+                                break;
+
+                            case DragEvent.ACTION_DRAG_ENTERED:
+                                Log.d(msg, "Action is DragEvent.ACTION_DRAG_ENTERED");
+                                int x_cord = (int) event.getX();
+                                int y_cord = (int) event.getY();
+                                break;
+
+                            case DragEvent.ACTION_DRAG_EXITED :
+                                Log.d(msg, "Action is DragEvent.ACTION_DRAG_EXITED");
+
+                                break;
+
+                            case DragEvent.ACTION_DRAG_LOCATION  :
+                                Log.d(msg, "Action is DragEvent.ACTION_DRAG_LOCATION");
+                                x_cord = (int) event.getX();
+                                y_cord = (int) event.getY();
+                                break;
+
+                            case DragEvent.ACTION_DRAG_ENDED   :
+                                if (v.getId( )== R.id.my_image_view2) {
+                                    Log.d(msg, "Action is DragEvent.ACTION_DRAG_ENDED of iv2");
+
+                                    x_cord = (int) event.getX();
+                                    y_cord = (int) event.getY();
+                                    layoutParams.leftMargin = x_cord;
+                                    layoutParams.topMargin = y_cord;
+                                    v.setLayoutParams(layoutParams);
+                                    // Do nothing
+                                }
                                 break;
 
                             case DragEvent.ACTION_DROP:

@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity implements mouRWAdapter.Item
 
     mouRWAdapter adapter;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,8 +94,17 @@ public class MainActivity extends AppCompatActivity implements mouRWAdapter.Item
                 startActivity(intent);
             }
         });
+        final FloatingActionButton fabInTodos = (FloatingActionButton) findViewById(R.id.fabInTodos);
+        fabInTodos.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                getAdapter().newAddeddata("doesntmatter");
+            }
+        });
 
+    }
 
+    public mouRWAdapter getAdapter(){
+        return adapter;
     }
 
     @Override
