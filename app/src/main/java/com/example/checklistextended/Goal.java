@@ -42,15 +42,14 @@ public class Goal extends AppCompatActivity implements mouRWAdapter.ItemClickLis
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        final FloatingActionButton fabInTodos = (FloatingActionButton) findViewById(R.id.fabInGoal);
+        fabInTodos.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                getAdapter().newAddeddata("doesntmatter");
             }
         });
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
 
