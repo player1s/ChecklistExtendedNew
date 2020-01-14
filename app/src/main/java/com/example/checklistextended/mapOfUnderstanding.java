@@ -7,6 +7,7 @@ import android.graphics.Canvas;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.DragEvent;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,10 +43,13 @@ public class mapOfUnderstanding extends AppCompatActivity {
         final TextView xCoord = findViewById(R.id.xCoordOfTouch);
         final TextView yCoord = findViewById(R.id.yCoordOfTouch);
         final CoordinatorLayout coordinatorLayoutInMap = findViewById(R.id.coordinatorlayoutForMap);
-        final RelativeLayout conceptInMap = findViewById(R.id.conceptInMap);
+        final RelativeLayout conceptInMapSinglePiece = findViewById(R.id.conceptInMap);
         final ImageView image = findViewById(R.id.my_image_view);
         Button buttonOnImage = findViewById(R.id.buttonOnImage);
         final boolean[] isMapBtnPressed = {false};
+        final ViewGroup viewGroup = (ViewGroup) findViewById(android.R.id.content);
+        final ArrayList<View> inflatedElements = new ArrayList<>();
+
 
         coordinatorLayoutInMap.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -54,8 +58,8 @@ public class mapOfUnderstanding extends AppCompatActivity {
                     xCoord.setText(String.valueOf(event.getX()) + " x");
                     yCoord.setText(String.valueOf(event.getY()) + " y");
                     if(isMapBtnPressed[0]) {
-                        conceptInMap.setX(event.getX());
-                        conceptInMap.setY(event.getY());
+                        conceptInMapSinglePiece.setX(event.getX());
+                        conceptInMapSinglePiece.setY(event.getY());
                         isMapBtnPressed[0] = false;
                     }
                 }
@@ -107,8 +111,23 @@ public class mapOfUnderstanding extends AppCompatActivity {
         final FloatingActionButton fabInMap = (FloatingActionButton) findViewById(R.id.fabInMap);
         fabInMap.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                final View inflatedConcept = LayoutInflater.from(getApplicationContext()).inflate(R.layout.conceptinmap,null);
+                inflatedConcept.setId(View.generateViewId());
+                inflatedElements.add(inflatedConcept);
+                viewGroup.addView(inflatedConcept);
+                inflatedConcept.setOnTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
 
+                        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                                v.setX(event.getX());
+                                v.setY(event.getY());
+                                isMapBtnPressed[0] = false;
 
+                        }
+                        return true;
+                    }
+                });
             }
         });
 
