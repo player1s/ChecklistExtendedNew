@@ -42,12 +42,15 @@ public class mapOfUnderstanding extends AppCompatActivity {
 
         final TextView xCoord = findViewById(R.id.xCoordOfTouch);
         final TextView yCoord = findViewById(R.id.yCoordOfTouch);
+        final TextView xCoord2 = findViewById(R.id.xCoordOfTouch2);
+        final TextView yCoord2 = findViewById(R.id.yCoordOfTouch2);
         final CoordinatorLayout coordinatorLayoutInMap = findViewById(R.id.coordinatorlayoutForMap);
         final RelativeLayout conceptInMapSinglePiece = findViewById(R.id.conceptInMap);
+        final RelativeLayout sub = findViewById(R.id.sub);
         final ImageView image = findViewById(R.id.my_image_view);
         Button buttonOnImage = findViewById(R.id.buttonOnImage);
         final boolean[] isMapBtnPressed = {false};
-        final ViewGroup viewGroup = (ViewGroup) findViewById(android.R.id.content);
+        final ViewGroup viewGroup = (ViewGroup) findViewById(R.id.coordinatorlayoutForMap);
         final ArrayList<View> inflatedElements = new ArrayList<>();
 
 
@@ -111,7 +114,7 @@ public class mapOfUnderstanding extends AppCompatActivity {
         final FloatingActionButton fabInMap = (FloatingActionButton) findViewById(R.id.fabInMap);
         fabInMap.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                final View inflatedConcept = LayoutInflater.from(getApplicationContext()).inflate(R.layout.conceptinmap,null);
+                final View inflatedConcept = LayoutInflater.from(getApplicationContext()).inflate(R.layout.conceptinmap,null, false);
                 inflatedConcept.setId(View.generateViewId());
                 inflatedElements.add(inflatedConcept);
                 viewGroup.addView(inflatedConcept);
@@ -120,6 +123,8 @@ public class mapOfUnderstanding extends AppCompatActivity {
                     public boolean onTouch(View v, MotionEvent event) {
 
                         if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                            xCoord2.setText(String.valueOf(event.getX()) + " x");
+                            yCoord2.setText(String.valueOf(event.getY()) + " y");
                                 v.setX(event.getX());
                                 v.setY(event.getY());
                                 isMapBtnPressed[0] = false;

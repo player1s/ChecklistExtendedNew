@@ -104,4 +104,27 @@
         android:layout_marginTop="600dp"
         android:text="yCoordOfTouch" />
 
+    <TextView
+        android:id="@+id/xCoordOfTouch2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="60dp"
+        android:layout_marginTop="500dp"
+        android:text="xCoordOfTouch" />
+
+    <TextView
+        android:id="@+id/yCoordOfTouch2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="200dp"
+        android:layout_marginTop="500dp"
+        android:text="yCoordOfTouch" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/sub">
+
+    </RelativeLayout>
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
