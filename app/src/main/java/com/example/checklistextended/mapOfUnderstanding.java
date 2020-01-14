@@ -9,9 +9,11 @@ import android.util.Log;
 import android.view.DragEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -36,9 +38,34 @@ public class mapOfUnderstanding extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.mapofunderstanding);
 
-        Canvas canvas = new Canvas();
+        final TextView xCoord = findViewById(R.id.xCoordOfTouch);
+        final TextView yCoord = findViewById(R.id.yCoordOfTouch);
+        final CoordinatorLayout coordinatorLayoutInMap = findViewById(R.id.coordinatorlayoutForMap);
+        final ImageView image = findViewById(R.id.my_image_view);
+        Button buttonOnImage = findViewById(R.id.buttonOnImage);
+        final boolean[] isMapBtnPressed = {false};
 
-        final CoordinatorLayout coordinatorLayoutInMap = (CoordinatorLayout) findViewById(R.id.coordinatorlayoutForMap);
+        coordinatorLayoutInMap.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    xCoord.setText(String.valueOf(event.getX()) + " x");
+                    yCoord.setText(String.valueOf(event.getY()) + " y");
+                    if(isMapBtnPressed[0]) {
+                        image.setX(event.getX());
+                        image.setY(event.getY());
+                        isMapBtnPressed[0] = false;
+                    }
+                }
+                return true;
+            }
+        });
+
+        buttonOnImage.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                isMapBtnPressed[0] = true;
+            }
+        });
 
         //set up the buttons on the toolbar
         Button btnTimeLineInMap = (Button) findViewById(R.id.btnTimeLineInMap);
@@ -79,255 +106,6 @@ public class mapOfUnderstanding extends AppCompatActivity {
         fabInMap.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
-                final ImageView iv = new ImageView(getApplicationContext());
-                ImageView iv1 = (ImageView)findViewById(R.id.my_image_view);
-                ImageView iv2 = (ImageView)findViewById(R.id.my_image_view2);
-                int generatedID = View.generateViewId();
-                iv.setTag(generatedID);
-
-
-                // Set an image for ImageView
-                iv.setImageDrawable(getDrawable(R.drawable.concept));
-
-                // Create layout parameters for ImageView
-                CoordinatorLayout.LayoutParams lp = new CoordinatorLayout.LayoutParams(CoordinatorLayout.LayoutParams.WRAP_CONTENT, CoordinatorLayout.LayoutParams.WRAP_CONTENT);
-
-                // Add rule to layout parameters
-                lp.setMargins(450,450,50,50);
-
-                // Add layout parameters to ImageView
-                iv.setLayoutParams(lp);
-
-                // Finally, add the ImageView to layout
-                coordinatorLayoutInMap.addView(iv);
-                ivShadow = iv;
-
-                //---------------------------START: DRAGGING THINGS FUNCTIONALITY----------------------
-
-                //iv=(ImageView)findViewById(R.id.my_image_view);
-
-                iv.setOnLongClickListener(new View.OnLongClickListener() {
-                    @Override
-                    public boolean onLongClick(View v) {
-                        Log.d(msg, "About to start drag of iv");
-                        ClipData.Item item = new ClipData.Item(String.valueOf(v.getTag()));
-                        String[] mimeTypes = {ClipDescription.MIMETYPE_TEXT_PLAIN};
-
-                        ClipData dragData = new ClipData(v.getTag().toString(),mimeTypes, item);
-                        View.DragShadowBuilder myShadow = new View.DragShadowBuilder(ivShadow);
-
-                        v.startDrag(dragData,myShadow,null,0);
-                        return true;
-                    }
-                });
-
-                iv.setOnDragListener(new View.OnDragListener() {
-                    @Override
-                    public boolean onDrag(View v, DragEvent event) {
-                        switch(event.getAction()) {
-                            case DragEvent.ACTION_DRAG_STARTED:
-                                layoutParams = (CoordinatorLayout.LayoutParams)v.getLayoutParams();
-                                Log.d(msg, "Action is DragEvent.ACTION_DRAG_STARTED");
-
-                                // Do nothing
-                                break;
-
-                            case DragEvent.ACTION_DRAG_ENTERED:
-                                Log.d(msg, "Action is DragEvent.ACTION_DRAG_ENTERED");
-                                int x_cord = (int) event.getX();
-                                int y_cord = (int) event.getY();
-                                break;
-
-                            case DragEvent.ACTION_DRAG_EXITED :
-                                Log.d(msg, "Action is DragEvent.ACTION_DRAG_EXITED");
-
-                                break;
-
-                            case DragEvent.ACTION_DRAG_LOCATION  :
-                                Log.d(msg, "Action is DragEvent.ACTION_DRAG_LOCATION");
-                                x_cord = (int) event.getX();
-                                y_cord = (int) event.getY();
-                                break;
-
-                            case DragEvent.ACTION_DRAG_ENDED   :
-                                Log.d(msg, "Action is DragEvent.ACTION_DRAG_ENDED of iv");
-
-                                x_cord = (int) event.getX();
-                                y_cord = (int) event.getY();
-                                layoutParams.leftMargin = x_cord;
-                                layoutParams.topMargin = y_cord;
-                                v.setLayoutParams(layoutParams);
-                                // Do nothing
-                                break;
-
-                            case DragEvent.ACTION_DROP:
-                                Log.d(msg, "ACTION_DROP event");
-
-                                // Do nothing
-                                break;
-                            default: break;
-                        }
-                        return true;
-                    }
-                });
-
-                iv1.setOnLongClickListener(new View.OnLongClickListener() {
-                    @Override
-                    public boolean onLongClick(View v) {
-                        if (v.getId( )== R.id.my_image_view) {
-                            Log.d(msg, "About to start drag of iv1");
-                            ClipData.Item item = new ClipData.Item(String.valueOf(v.getTag()));
-                            String[] mimeTypes = {ClipDescription.MIMETYPE_TEXT_PLAIN};
-
-                            ClipData dragData = new ClipData(String.valueOf(v.getId()), mimeTypes, item);
-                            View.DragShadowBuilder myShadow = new View.DragShadowBuilder(ivShadow);
-
-                            v.startDrag(dragData, myShadow, null, 0);
-                        }
-                        return true;
-                    }
-                });
-
-                iv1.setOnDragListener(new View.OnDragListener() {
-                    @Override
-                    public boolean onDrag(View v, DragEvent event) {
-                        switch(event.getAction()) {
-                            case DragEvent.ACTION_DRAG_STARTED:
-                                layoutParams = (CoordinatorLayout.LayoutParams)v.getLayoutParams();
-                                Log.d(msg, "Action is DragEvent.ACTION_DRAG_STARTED");
-
-                                // Do nothing
-                                break;
-
-                            case DragEvent.ACTION_DRAG_ENTERED:
-                                Log.d(msg, "Action is DragEvent.ACTION_DRAG_ENTERED");
-                                int x_cord = (int) event.getX();
-                                int y_cord = (int) event.getY();
-                                break;
-
-                            case DragEvent.ACTION_DRAG_EXITED :
-                                Log.d(msg, "Action is DragEvent.ACTION_DRAG_EXITED");
-
-                                break;
-
-                            case DragEvent.ACTION_DRAG_LOCATION  :
-                                Log.d(msg, "Action is DragEvent.ACTION_DRAG_LOCATION");
-                                x_cord = (int) event.getX();
-                                y_cord = (int) event.getY();
-                                break;
-
-                            case DragEvent.ACTION_DRAG_ENDED   :
-                                if (v.getId( )== R.id.my_image_view) {
-                                    Log.d(msg, "Action is DragEvent.ACTION_DRAG_ENDED of iv1");
-
-                                    x_cord = (int) event.getX();
-                                    y_cord = (int) event.getY();
-                                    layoutParams.leftMargin = x_cord;
-                                    layoutParams.topMargin = y_cord;
-                                    v.setLayoutParams(layoutParams);
-                                }
-                                // Do nothing
-                                break;
-
-                            case DragEvent.ACTION_DROP:
-                                Log.d(msg, "ACTION_DROP event");
-
-                                // Do nothing
-                                break;
-                            default: break;
-                        }
-                        return true;
-                    }
-                });
-
-                iv2.setOnLongClickListener(new View.OnLongClickListener() {
-                    @Override
-                    public boolean onLongClick(View v) {
-                        if (v.getId( )== R.id.my_image_view2) {
-                            Log.d(msg, "About to start drag of iv2");
-                            ClipData.Item item = new ClipData.Item(String.valueOf(v.getTag()));
-                            String[] mimeTypes = {ClipDescription.MIMETYPE_TEXT_PLAIN};
-
-                            ClipData dragData = new ClipData(String.valueOf(v.getId()), mimeTypes, item);
-                            View.DragShadowBuilder myShadow = new View.DragShadowBuilder(ivShadow);
-
-                            v.startDrag(dragData, myShadow, null, 0);
-                        }
-                        return true;
-                    }
-                });
-
-                iv2.setOnDragListener(new View.OnDragListener() {
-                    @Override
-                    public boolean onDrag(View v, DragEvent event) {
-                        switch(event.getAction()) {
-                            case DragEvent.ACTION_DRAG_STARTED:
-                                layoutParams = (CoordinatorLayout.LayoutParams)v.getLayoutParams();
-                                Log.d(msg, "Action is DragEvent.ACTION_DRAG_STARTED");
-
-                                // Do nothing
-                                break;
-
-                            case DragEvent.ACTION_DRAG_ENTERED:
-                                Log.d(msg, "Action is DragEvent.ACTION_DRAG_ENTERED");
-                                int x_cord = (int) event.getX();
-                                int y_cord = (int) event.getY();
-                                break;
-
-                            case DragEvent.ACTION_DRAG_EXITED :
-                                Log.d(msg, "Action is DragEvent.ACTION_DRAG_EXITED");
-
-                                break;
-
-                            case DragEvent.ACTION_DRAG_LOCATION  :
-                                Log.d(msg, "Action is DragEvent.ACTION_DRAG_LOCATION");
-                                x_cord = (int) event.getX();
-                                y_cord = (int) event.getY();
-                                break;
-
-                            case DragEvent.ACTION_DRAG_ENDED   :
-                                if (v.getId( )== R.id.my_image_view2) {
-                                    Log.d(msg, "Action is DragEvent.ACTION_DRAG_ENDED of iv2");
-
-                                    x_cord = (int) event.getX();
-                                    y_cord = (int) event.getY();
-                                    layoutParams.leftMargin = x_cord;
-                                    layoutParams.topMargin = y_cord;
-                                    v.setLayoutParams(layoutParams);
-                                    // Do nothing
-                                }
-                                break;
-
-                            case DragEvent.ACTION_DROP:
-                                Log.d(msg, "ACTION_DROP event");
-
-                                // Do nothing
-                                break;
-                            default: break;
-                        }
-                        return true;
-                    }
-                });
-/*
-        img.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    ClipData data = ClipData.newPlainText("", "");
-                    View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(img);
-
-                    img.startDrag(data, shadowBuilder, img, 0);
-                    img.setVisibility(View.INVISIBLE);
-                    return true;
-                } else {
-                    return false;
-                }
-            }
-        });
-
- */
-
-                //---------------------------END: DRAGGING THINGS FUNCTIONALITY----------------------
 
             }
         });

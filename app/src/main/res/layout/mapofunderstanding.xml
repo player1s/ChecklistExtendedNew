@@ -72,4 +72,28 @@
         android:layout_margin="@dimen/fab_margin"
         app:srcCompat="@android:drawable/ic_dialog_email" />
 
+    <TextView
+        android:id="@+id/xCoordOfTouch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="60dp"
+        android:layout_marginTop="600dp"
+        android:text="xCoordOfTouch" />
+
+    <TextView
+        android:id="@+id/yCoordOfTouch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="200dp"
+        android:layout_marginTop="600dp"
+        android:text="yCoordOfTouch" />
+
+    <Button
+        android:id="@+id/buttonOnImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="150dp"
+        android:layout_marginTop="200dp"
+        android:text="Button" />
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
