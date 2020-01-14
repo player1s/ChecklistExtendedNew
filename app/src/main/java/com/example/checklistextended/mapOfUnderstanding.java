@@ -50,7 +50,7 @@ public class mapOfUnderstanding extends AppCompatActivity {
         final ImageView image = findViewById(R.id.my_image_view);
         Button buttonOnImage = findViewById(R.id.buttonOnImage);
         final boolean[] isMapBtnPressed = {false};
-        final ViewGroup viewGroup = (ViewGroup) findViewById(R.id.coordinatorlayoutForMap);
+        final ViewGroup viewGroup = (ViewGroup) findViewById(android.R.id.content);
         final ArrayList<View> inflatedElements = new ArrayList<>();
 
 
@@ -114,10 +114,10 @@ public class mapOfUnderstanding extends AppCompatActivity {
         final FloatingActionButton fabInMap = (FloatingActionButton) findViewById(R.id.fabInMap);
         fabInMap.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                final View inflatedConcept = LayoutInflater.from(getApplicationContext()).inflate(R.layout.conceptinmap,null, false);
+                final View inflatedConcept = LayoutInflater.from(getApplicationContext()).inflate(R.layout.conceptinmap,viewGroup);
                 inflatedConcept.setId(View.generateViewId());
                 inflatedElements.add(inflatedConcept);
-                viewGroup.addView(inflatedConcept);
+                //viewGroup.addView(inflatedConcept);
                 inflatedConcept.setOnTouchListener(new View.OnTouchListener() {
                     @Override
                     public boolean onTouch(View v, MotionEvent event) {
