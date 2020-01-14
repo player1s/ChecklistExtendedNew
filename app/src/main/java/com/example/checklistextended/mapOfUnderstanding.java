@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,6 +42,7 @@ public class mapOfUnderstanding extends AppCompatActivity {
         final TextView xCoord = findViewById(R.id.xCoordOfTouch);
         final TextView yCoord = findViewById(R.id.yCoordOfTouch);
         final CoordinatorLayout coordinatorLayoutInMap = findViewById(R.id.coordinatorlayoutForMap);
+        final RelativeLayout conceptInMap = findViewById(R.id.conceptInMap);
         final ImageView image = findViewById(R.id.my_image_view);
         Button buttonOnImage = findViewById(R.id.buttonOnImage);
         final boolean[] isMapBtnPressed = {false};
@@ -52,8 +54,8 @@ public class mapOfUnderstanding extends AppCompatActivity {
                     xCoord.setText(String.valueOf(event.getX()) + " x");
                     yCoord.setText(String.valueOf(event.getY()) + " y");
                     if(isMapBtnPressed[0]) {
-                        image.setX(event.getX());
-                        image.setY(event.getY());
+                        conceptInMap.setX(event.getX());
+                        conceptInMap.setY(event.getY());
                         isMapBtnPressed[0] = false;
                     }
                 }
