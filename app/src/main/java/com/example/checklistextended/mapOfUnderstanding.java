@@ -114,9 +114,25 @@ public class mapOfUnderstanding extends AppCompatActivity {
                 inflatedConcept.setId(View.generateViewId());
                 Log.d(TAG,"Generated View: " + inflatedConcept.getId());
                 inflatedElements.add(inflatedConcept);
-
-
                 viewGroup.addView(inflatedConcept);
+
+                if (inflatedConcept instanceof ViewGroup) {
+                    Log.d(TAG,"Generated View is part of viewgroup " + inflatedConcept.getId());
+                    ViewGroup viewGroup = (ViewGroup) inflatedConcept;
+                    Button buttonOfChildConcept = (Button) viewGroup.getChildAt(0);
+                    buttonOfChildConcept.setOnClickListener(new View.OnClickListener() {
+                        public void onClick(View v) {
+                            Intent intent = new Intent(v.getContext(), weekPlan.class);
+                            startActivity(intent);
+                        }
+                    });
+                    for(int i = 0; i< viewGroup.getChildCount(); ++i) {
+                        Log.d(TAG,"Started looking through the children of: " + inflatedConcept.getId());
+                        View child = viewGroup.getChildAt(i);
+
+                        // Edit the child
+                    }
+                }
             }
         });
 
@@ -136,7 +152,7 @@ public class mapOfUnderstanding extends AppCompatActivity {
                     @Override
                     public boolean onTouch(View v, MotionEvent event) {
                         if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                            Log.d(TAG,"touch fired on View: "+vToPut.getId()+" to replace on View: " +v.getId());
+                            Log.d(TAG,"touch fired on View: "+vToPut.getId()+" to replace on CoordinatorLayout: " +v.getId());
                             vToAssign.setX(event.getX());
                             vToAssign.setY(event.getY());
                             coordinatorLayoutInMap.setOnTouchListener(null);
