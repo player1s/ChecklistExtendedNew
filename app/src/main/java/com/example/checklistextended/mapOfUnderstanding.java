@@ -122,7 +122,7 @@ public class mapOfUnderstanding extends AppCompatActivity {
                     Button buttonOfChildConcept = (Button) viewGroup.getChildAt(0);
                     buttonOfChildConcept.setOnClickListener(new View.OnClickListener() {
                         public void onClick(View v) {
-                            Intent intent = new Intent(v.getContext(), weekPlan.class);
+                            Intent intent = new Intent(v.getContext(), ConceptDetails.class);
                             startActivity(intent);
                         }
                     });
