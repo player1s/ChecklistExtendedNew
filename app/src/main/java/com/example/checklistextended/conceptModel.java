@@ -3,6 +3,13 @@ package com.example.checklistextended;
 import java.util.ArrayList;
 
 public class conceptModel {
+
+    boolean ismapButtonPressed;
+    int id;
+
+}
+
+/*
     boolean isActive;
     String name;
     String definition;
@@ -100,3 +107,6 @@ public class conceptModel {
         this.id = id;
     }
 }
+
+
+ */

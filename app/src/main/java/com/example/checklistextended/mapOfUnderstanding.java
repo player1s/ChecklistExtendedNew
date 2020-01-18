@@ -29,17 +29,14 @@ import java.util.ArrayList;
 
 public class mapOfUnderstanding extends AppCompatActivity {
 
-    //---------------------------START: DRAGGING THINGS----------------------
-    ImageView ivShadow;
-    String msg;
-    private CoordinatorLayout.LayoutParams layoutParams;
-    //---------------------------END: DRAGGING THINGS----------------------
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState)  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.mapofunderstanding);
 
+        final ArrayList<conceptModel> conceptList = new ArrayList<>();
         final TextView xCoord = findViewById(R.id.xCoordOfTouch);
         final TextView yCoord = findViewById(R.id.yCoordOfTouch);
         final TextView xCoord2 = findViewById(R.id.xCoordOfTouch2);
@@ -53,22 +50,20 @@ public class mapOfUnderstanding extends AppCompatActivity {
         final ViewGroup viewGroup = (ViewGroup) findViewById(android.R.id.content);
         final ArrayList<View> inflatedElements = new ArrayList<>();
 
-
-        coordinatorLayoutInMap.setOnTouchListener(new View.OnTouchListener() {
+        View.OnTouchListener touchListenerForCoords = new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     xCoord.setText(String.valueOf(event.getX()) + " x");
                     yCoord.setText(String.valueOf(event.getY()) + " y");
-                    if(isMapBtnPressed[0]) {
-                        conceptInMapSinglePiece.setX(event.getX());
-                        conceptInMapSinglePiece.setY(event.getY());
-                        isMapBtnPressed[0] = false;
-                    }
+
                 }
                 return true;
             }
-        });
+        };
+
+
+        coordinatorLayoutInMap.setOnTouchListener(touchListenerForCoords);
 
         buttonOnImage.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -114,28 +109,45 @@ public class mapOfUnderstanding extends AppCompatActivity {
         final FloatingActionButton fabInMap = (FloatingActionButton) findViewById(R.id.fabInMap);
         fabInMap.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                final View inflatedConcept = LayoutInflater.from(getApplicationContext()).inflate(R.layout.conceptinmap,viewGroup);
+                final View inflatedConcept = LayoutInflater.from(getApplicationContext()).inflate(R.layout.conceptinmap,viewGroup,false);
+                addToExistingTouchListener(inflatedConcept,coordinatorLayoutInMap);
                 inflatedConcept.setId(View.generateViewId());
                 inflatedElements.add(inflatedConcept);
-                //viewGroup.addView(inflatedConcept);
-                inflatedConcept.setOnTouchListener(new View.OnTouchListener() {
-                    @Override
-                    public boolean onTouch(View v, MotionEvent event) {
 
-                        if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                            xCoord2.setText(String.valueOf(event.getX()) + " x");
-                            yCoord2.setText(String.valueOf(event.getY()) + " y");
-                                v.setX(event.getX());
-                                v.setY(event.getY());
-                                isMapBtnPressed[0] = false;
 
-                        }
-                        return true;
-                    }
-                });
+                viewGroup.addView(inflatedConcept);
             }
         });
 
+
+    }
+
+    private void addToExistingTouchListener(final View vToAssign, final CoordinatorLayout coordinatorLayoutInMap)
+    {
+        View.OnLongClickListener longClickListener = (new View.OnLongClickListener()
+        {
+
+            @Override
+            public boolean onLongClick(View v)
+            {
+                Toast.makeText(getApplicationContext(), "long clickeddddd", Toast.LENGTH_SHORT).show();
+                View.OnTouchListener touchListener = new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        Toast.makeText(getApplicationContext(), "long clicked", Toast.LENGTH_SHORT).show();
+                        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                            vToAssign.setX(event.getX());
+                            vToAssign.setY(event.getY());
+                            coordinatorLayoutInMap.setOnTouchListener(null);
+                        }
+                        return true;
+                    }
+                };
+                coordinatorLayoutInMap.setOnTouchListener(touchListener);
+                return true;
+            }
+        });
+        vToAssign.setOnLongClickListener(longClickListener);
 
     }
 
