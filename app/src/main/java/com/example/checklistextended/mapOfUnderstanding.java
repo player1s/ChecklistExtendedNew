@@ -29,7 +29,7 @@ import java.util.ArrayList;
 
 public class mapOfUnderstanding extends AppCompatActivity {
 
-
+    private static final String TAG = "MyActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState)  {
@@ -112,6 +112,7 @@ public class mapOfUnderstanding extends AppCompatActivity {
                 final View inflatedConcept = LayoutInflater.from(getApplicationContext()).inflate(R.layout.conceptinmap,viewGroup,false);
                 addToExistingTouchListener(inflatedConcept,coordinatorLayoutInMap);
                 inflatedConcept.setId(View.generateViewId());
+                Log.d(TAG,"Generated View: " + inflatedConcept.getId());
                 inflatedElements.add(inflatedConcept);
 
 
@@ -128,14 +129,14 @@ public class mapOfUnderstanding extends AppCompatActivity {
         {
 
             @Override
-            public boolean onLongClick(View v)
+            public boolean onLongClick(final View vToPut)
             {
-                Toast.makeText(getApplicationContext(), "long clickeddddd", Toast.LENGTH_SHORT).show();
+                Log.d(TAG,"longclick fired on View: "+vToPut.getId());
                 View.OnTouchListener touchListener = new View.OnTouchListener() {
                     @Override
                     public boolean onTouch(View v, MotionEvent event) {
-                        Toast.makeText(getApplicationContext(), "long clicked", Toast.LENGTH_SHORT).show();
                         if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                            Log.d(TAG,"touch fired on View: "+vToPut.getId()+" to replace on View: " +v.getId());
                             vToAssign.setX(event.getX());
                             vToAssign.setY(event.getY());
                             coordinatorLayoutInMap.setOnTouchListener(null);
