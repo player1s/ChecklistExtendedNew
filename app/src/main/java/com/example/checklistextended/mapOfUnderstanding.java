@@ -39,8 +39,6 @@ public class mapOfUnderstanding extends AppCompatActivity {
         final ArrayList<conceptModel> conceptList = new ArrayList<>();
         final TextView xCoord = findViewById(R.id.xCoordOfTouch);
         final TextView yCoord = findViewById(R.id.yCoordOfTouch);
-        final TextView xCoord2 = findViewById(R.id.xCoordOfTouch2);
-        final TextView yCoord2 = findViewById(R.id.yCoordOfTouch2);
         final CoordinatorLayout coordinatorLayoutInMap = findViewById(R.id.coordinatorlayoutForMap);
         final RelativeLayout conceptInMapSinglePiece = findViewById(R.id.conceptInMap);
         final RelativeLayout sub = findViewById(R.id.sub);
@@ -64,12 +62,6 @@ public class mapOfUnderstanding extends AppCompatActivity {
 
 
         coordinatorLayoutInMap.setOnTouchListener(touchListenerForCoords);
-
-        buttonOnImage.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                isMapBtnPressed[0] = true;
-            }
-        });
 
         //set up the buttons on the toolbar
         Button btnTimeLineInMap = (Button) findViewById(R.id.btnTimeLineInMap);
