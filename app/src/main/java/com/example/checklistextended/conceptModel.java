@@ -4,34 +4,31 @@ import java.util.ArrayList;
 
 public class conceptModel {
 
-    boolean ismapButtonPressed;
     int id;
-
-}
-
-/*
     boolean isActive;
     String name;
     String definition;
     String glossary;
-    ArrayList<conceptModel> childElements;
+    String thingsItsBuiltOf;
     String plans;
-    ArrayList<conceptModel> parentElements;
+    String uses;
     String purpose;
-    int id;
-    //associatedWith:
-    //ArrayList<conceptModel> associatedWith;
+    ArrayList<conceptModel> childElements;
+    ArrayList<conceptModel> parentElements;
+    ArrayList<conceptModel> associatedWith;
+    long coordx;
+    long coordy;
+    String fireBaseId;
+    String docStoredIn;
 
+    public conceptModel() {
+    }
 
-    public conceptModel(boolean isActive, String name, String definition, String glossary, ArrayList<conceptModel> childElements, String plans, ArrayList<conceptModel> parentElements, String purpose, int id) {
-        this.isActive = isActive;
-        this.name = name;
-        this.definition = definition;
-        this.glossary = glossary;
-        this.childElements = childElements;
-        this.plans = plans;
-        this.parentElements = parentElements;
-        this.purpose = purpose;
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -67,12 +64,12 @@ public class conceptModel {
         this.glossary = glossary;
     }
 
-    public ArrayList<conceptModel> getChildElements() {
-        return childElements;
+    public String getThingsItsBuiltOf() {
+        return thingsItsBuiltOf;
     }
 
-    public void setChildElements(ArrayList<conceptModel> childElements) {
-        this.childElements = childElements;
+    public void setThingsItsBuiltOf(String thingsItsBuiltOf) {
+        this.thingsItsBuiltOf = thingsItsBuiltOf;
     }
 
     public String getPlans() {
@@ -83,12 +80,12 @@ public class conceptModel {
         this.plans = plans;
     }
 
-    public ArrayList<conceptModel> getParentElements() {
-        return parentElements;
+    public String getUses() {
+        return uses;
     }
 
-    public void setParentElements(ArrayList<conceptModel> parentElements) {
-        this.parentElements = parentElements;
+    public void setUses(String uses) {
+        this.uses = uses;
     }
 
     public String getPurpose() {
@@ -99,14 +96,61 @@ public class conceptModel {
         this.purpose = purpose;
     }
 
-    public int getId() {
-        return id;
+    public ArrayList<conceptModel> getChildElements() {
+        return childElements;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setChildElements(ArrayList<conceptModel> childElements) {
+        this.childElements = childElements;
+    }
+
+    public ArrayList<conceptModel> getParentElements() {
+        return parentElements;
+    }
+
+    public void setParentElements(ArrayList<conceptModel> parentElements) {
+        this.parentElements = parentElements;
+    }
+
+    public ArrayList<conceptModel> getAssociatedWith() {
+        return associatedWith;
+    }
+
+    public void setAssociatedWith(ArrayList<conceptModel> associatedWith) {
+        this.associatedWith = associatedWith;
+    }
+
+    public long getCoordx() {
+        return coordx;
+    }
+
+    public void setCoordx(long coordx) {
+        this.coordx = coordx;
+    }
+
+    public long getCoordy() {
+        return coordy;
+    }
+
+    public void setCoordy(long coordy) {
+        this.coordy = coordy;
+    }
+
+    public String getFireBaseId() {
+        return fireBaseId;
+    }
+
+    public void setFireBaseId(String fireBaseId) {
+        this.fireBaseId = fireBaseId;
+    }
+
+    public String getDocStoredIn() {
+        return docStoredIn;
+    }
+
+    public void setDocStoredIn(String docStoredIn) {
+        this.docStoredIn = docStoredIn;
     }
 }
 
 
- */

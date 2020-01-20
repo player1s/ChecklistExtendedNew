@@ -64,53 +64,117 @@
         android:layout_marginTop="60dp"
         android:text="Name" />
 
+    <EditText
+        android:id="@+id/editNameInDetails"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="80dp"
+        android:ems="10"
+        android:inputType="textMultiLine" />
+
     <TextView
         android:id="@+id/DefinitionInDetails"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="0dp"
-        android:layout_marginTop="120dp"
+        android:layout_marginTop="150dp"
         android:text="Definition" />
+
+    <EditText
+        android:id="@+id/editDefinitionInDetails"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="170dp"
+        android:ems="10"
+        android:inputType="textMultiLine" />
 
     <TextView
         android:id="@+id/GlossaryInDetails"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="0dp"
-        android:layout_marginTop="180dp"
+        android:layout_marginTop="240dp"
         android:text="Glossary" />
+
+    <EditText
+        android:id="@+id/editGlossaryInDetails"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="260dp"
+        android:ems="10"
+        android:inputType="textMultiLine" />
 
     <TextView
         android:id="@+id/ThingsItIsBuiltFromInDetails"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="0dp"
-        android:layout_marginTop="240dp"
+        android:layout_marginTop="320dp"
         android:text="Things it is built from" />
+
+    <EditText
+        android:id="@+id/editThingsItIsBuiltFromInDetails"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="340dp"
+        android:ems="10"
+        android:inputType="textMultiLine" />
 
     <TextView
         android:id="@+id/PlansInDetails"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="0dp"
-        android:layout_marginTop="300dp"
+        android:layout_marginTop="410dp"
         android:text="Plans" />
+
+    <EditText
+        android:id="@+id/editPlansInDetails"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="430dp"
+        android:ems="10"
+        android:inputType="textMultiLine" />
 
     <TextView
         android:id="@+id/UsesInDetails"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="0dp"
-        android:layout_marginTop="360dp"
+        android:layout_marginTop="500dp"
         android:text="Where it is used" />
+
+    <EditText
+        android:id="@+id/editUsesInDetails"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="520dp"
+        android:ems="10"
+        android:inputType="textMultiLine" />
 
     <TextView
         android:id="@+id/PurposeInDetails"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="0dp"
-        android:layout_marginTop="420dp"
+        android:layout_marginTop="590dp"
         android:text="Purpose" />
+
+    <EditText
+        android:id="@+id/editPurposeInDetails"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="610dp"
+        android:ems="10"
+        android:inputType="textMultiLine"
+        android:overScrollMode="always"/>
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

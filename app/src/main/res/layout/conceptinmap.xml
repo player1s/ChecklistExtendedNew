@@ -14,11 +14,19 @@
         android:layout_marginTop="0dp"
         android:text="More details" />
 
-        <ImageView
-            android:id="@+id/my_image_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="0dp"
-            android:layout_marginTop="0dp"
-            android:background="@drawable/concept" />
-    </RelativeLayout>
+    <ImageView
+        android:id="@+id/my_image_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="0dp"
+        android:background="@drawable/concept" />
+
+    <TextView
+        android:id="@+id/nameOnImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="50dp"
+        android:text="name" />
+</RelativeLayout>
