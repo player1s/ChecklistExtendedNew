@@ -1,8 +1,9 @@
 package com.example.checklistextended;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class conceptModel {
+public class conceptModel implements Serializable {
 
     int id;
     boolean isActive;

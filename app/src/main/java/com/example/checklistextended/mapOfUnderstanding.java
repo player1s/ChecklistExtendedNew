@@ -79,7 +79,7 @@ public class mapOfUnderstanding extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Log.d(TAG, document.getId() + " => " + document.getData());
-                                conceptModel conceptModel = new conceptModel();
+                                final conceptModel conceptModel = new conceptModel();
                                 conceptModel.setName((String)document.get("name"));
                                 conceptModel.setDefinition((String)document.get("definition"));
                                 conceptModel.setGlossary((String)document.get("glossary"));
@@ -107,6 +107,7 @@ public class mapOfUnderstanding extends AppCompatActivity {
                                     buttonOfChildConcept.setOnClickListener(new View.OnClickListener() {
                                         public void onClick(View v) {
                                             Intent intent = new Intent(v.getContext(), ConceptDetails.class);
+                                            intent.putExtra("baseInfo", conceptModel);
                                             startActivity(intent);
                                         }
                                     });
