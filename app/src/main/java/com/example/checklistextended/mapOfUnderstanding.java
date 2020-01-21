@@ -38,7 +38,7 @@ import java.util.ArrayList;
 
 public class mapOfUnderstanding extends AppCompatActivity {
 
-    private static final String TAG = "MyActivity";
+    private static final String TAG = "mapofunderstanding";
 
     @Override
     protected void onCreate(Bundle savedInstanceState)  {
@@ -89,6 +89,7 @@ public class mapOfUnderstanding extends AppCompatActivity {
                                 conceptModel.setPurpose((String)document.get("purpose"));
                                 conceptModel.setCoordx((long)document.get("coordx"));
                                 conceptModel.setCoordy((long)document.get("coordy"));
+                                conceptModel.setFireBaseId(document.getId());
                                 conceptList.add(conceptModel);
 
                                 final View inflatedConcept = LayoutInflater.from(getApplicationContext()).inflate(R.layout.conceptinmap,viewGroup,false);
