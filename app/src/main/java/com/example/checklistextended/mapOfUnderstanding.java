@@ -39,13 +39,16 @@ import java.util.ArrayList;
 public class mapOfUnderstanding extends AppCompatActivity {
 
     private static final String TAG = "mapofunderstanding";
+    final ArrayList<conceptModel> conceptList = new ArrayList<>();
+    final ArrayList<View> inflatedElements = new ArrayList<>();
+    final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState)  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.mapofunderstanding);
 
-        final ArrayList<conceptModel> conceptList = new ArrayList<>();
+
         final TextView xCoord = findViewById(R.id.xCoordOfTouch);
         final TextView yCoord = findViewById(R.id.yCoordOfTouch);
         final CoordinatorLayout coordinatorLayoutInMap = findViewById(R.id.coordinatorlayoutForMap);
@@ -55,7 +58,6 @@ public class mapOfUnderstanding extends AppCompatActivity {
         Button buttonOnImage = findViewById(R.id.buttonOnImage);
         final boolean[] isMapBtnPressed = {false};
         final ViewGroup viewGroup = (ViewGroup) findViewById(android.R.id.content);
-        final ArrayList<View> inflatedElements = new ArrayList<>();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference docRef = db.collection("users").document("gQprmC2uxhPBXfV8uMxa")
                 .collection("MapOfUnderstanding");
@@ -195,7 +197,8 @@ public class mapOfUnderstanding extends AppCompatActivity {
                 Log.d(TAG,"Generated View: " + inflatedConcept.getId());
                 inflatedElements.add(inflatedConcept);
                 viewGroup.addView(inflatedConcept);
-
+                final conceptModel conceptModel = new conceptModel();
+                conceptList.add(conceptModel);
                 if (inflatedConcept instanceof ViewGroup) {
                     Log.d(TAG,"Generated View is part of viewgroup " + inflatedConcept.getId());
                     ViewGroup viewGroup = (ViewGroup) inflatedConcept;
@@ -235,6 +238,18 @@ public class mapOfUnderstanding extends AppCompatActivity {
                             Log.d(TAG,"touch fired on View: "+vToPut.getId()+" to replace on CoordinatorLayout: " +v.getId());
                             vToAssign.setX(event.getX());
                             vToAssign.setY(event.getY());
+                            for(int i = 0; i<inflatedElements.size();i++)
+                            {
+                                if(inflatedElements.get(i).getId() == vToAssign.getId())
+                                {
+                                    final DocumentReference docRef = db.collection("users").document("gQprmC2uxhPBXfV8uMxa")
+                                            .collection("MapOfUnderstanding").document(conceptList.get(i).getFireBaseId());
+                                    conceptList.get(i).setCoordx((long)event.getX());
+                                    conceptList.get(i).setCoordy((long)event.getY());
+                                    docRef.update("coordx",  conceptList.get(i).getCoordx());
+                                    docRef.update("coordy",  conceptList.get(i).getCoordy());
+                                }
+                            }
                             coordinatorLayoutInMap.setOnTouchListener(null);
                         }
                         return true;
