@@ -233,6 +233,7 @@ public class mapOfUnderstanding extends AppCompatActivity {
                     buttonOfChildConcept.setOnClickListener(new View.OnClickListener() {
                         public void onClick(View v) {
                             Intent intent = new Intent(v.getContext(), ConceptDetails.class);
+                            intent.putExtra("baseInfo", conceptModel);
                             startActivity(intent);
                         }
                     });
