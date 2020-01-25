@@ -25,6 +25,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.CollectionReference;
@@ -35,6 +37,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 public class mapOfUnderstanding extends AppCompatActivity {
 
@@ -42,6 +45,8 @@ public class mapOfUnderstanding extends AppCompatActivity {
     final ArrayList<conceptModel> conceptList = new ArrayList<>();
     final ArrayList<View> inflatedElements = new ArrayList<>();
     final FirebaseFirestore db = FirebaseFirestore.getInstance();
+    final CollectionReference colRef = db.collection("users").document("gQprmC2uxhPBXfV8uMxa")
+            .collection("MapOfUnderstanding");
 
     @Override
     protected void onCreate(Bundle savedInstanceState)  {
@@ -58,7 +63,6 @@ public class mapOfUnderstanding extends AppCompatActivity {
         Button buttonOnImage = findViewById(R.id.buttonOnImage);
         final boolean[] isMapBtnPressed = {false};
         final ViewGroup viewGroup = (ViewGroup) findViewById(android.R.id.content);
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference docRef = db.collection("users").document("gQprmC2uxhPBXfV8uMxa")
                 .collection("MapOfUnderstanding");
 
@@ -192,13 +196,36 @@ public class mapOfUnderstanding extends AppCompatActivity {
         fabInMap.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 final View inflatedConcept = LayoutInflater.from(getApplicationContext()).inflate(R.layout.conceptinmap,viewGroup,false);
-                addToExistingTouchListener(inflatedConcept,coordinatorLayoutInMap);
-                inflatedConcept.setId(View.generateViewId());
+                int generatedId = View.generateViewId();
+                inflatedConcept.setId(generatedId);
                 Log.d(TAG,"Generated View: " + inflatedConcept.getId());
                 inflatedElements.add(inflatedConcept);
-                viewGroup.addView(inflatedConcept);
                 final conceptModel conceptModel = new conceptModel();
+                conceptModel.setId(generatedId);
+                conceptModel.setFireBaseId(Integer.toString(generatedId));
+                Map map = conceptModel.createMap();
                 conceptList.add(conceptModel);
+                db.collection("users").document("gQprmC2uxhPBXfV8uMxa")
+                        .collection("MapOfUnderstanding").document(Integer.toString(conceptModel.getId()))
+                        .set(map)
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Log.d(TAG, "DocumentSnapshot successfully written!");
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.w(TAG, "Error writing document", e);
+                            }
+                        });
+
+
+                addToExistingTouchListener(inflatedConcept,coordinatorLayoutInMap);
+                viewGroup.addView(inflatedConcept);
+
+
                 if (inflatedConcept instanceof ViewGroup) {
                     Log.d(TAG,"Generated View is part of viewgroup " + inflatedConcept.getId());
                     ViewGroup viewGroup = (ViewGroup) inflatedConcept;
@@ -242,12 +269,12 @@ public class mapOfUnderstanding extends AppCompatActivity {
                             {
                                 if(inflatedElements.get(i).getId() == vToAssign.getId())
                                 {
-                                    final DocumentReference docRef = db.collection("users").document("gQprmC2uxhPBXfV8uMxa")
-                                            .collection("MapOfUnderstanding").document(conceptList.get(i).getFireBaseId());
+                                    final DocumentReference docRef = colRef.document(conceptList.get(i).getFireBaseId());
                                     conceptList.get(i).setCoordx((long)event.getX());
                                     conceptList.get(i).setCoordy((long)event.getY());
                                     docRef.update("coordx",  conceptList.get(i).getCoordx());
                                     docRef.update("coordy",  conceptList.get(i).getCoordy());
+                                    break;
                                 }
                             }
                             coordinatorLayoutInMap.setOnTouchListener(null);

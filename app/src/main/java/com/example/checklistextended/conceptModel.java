@@ -2,25 +2,27 @@ package com.example.checklistextended;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class conceptModel implements Serializable {
 
-    int id;
+    int id = 0;
     boolean isActive;
-    String name;
-    String definition;
-    String glossary;
-    String thingsItsBuiltOf;
-    String plans;
-    String uses;
-    String purpose;
+    String name = "";
+    String definition = "";
+    String glossary = "";
+    String thingsItsBuiltOf = "";
+    String plans = "";
+    String uses = "";
+    String purpose = "";
     ArrayList<conceptModel> childElements;
     ArrayList<conceptModel> parentElements;
     ArrayList<conceptModel> associatedWith;
-    long coordx;
-    long coordy;
-    String fireBaseId;
-    String docStoredIn;
+    long coordx = 250;
+    long coordy = 250;
+    String fireBaseId = "";
+    String docStoredIn = "";
 
     public conceptModel() {
     }
@@ -151,6 +153,21 @@ public class conceptModel implements Serializable {
 
     public void setDocStoredIn(String docStoredIn) {
         this.docStoredIn = docStoredIn;
+    }
+
+    public Map createMap(){
+        Map<String, Object> map = new HashMap<>();
+        map.put("name", getName());
+        map.put("definition", getDefinition());
+        map.put("glossary", getGlossary());
+        map.put("thingsitsbuiltof", getThingsItsBuiltOf());
+        map.put("plans", getPlans());
+        map.put("uses", getUses());
+        map.put("purpose", getPurpose());
+        map.put("coordx", getCoordx());
+        map.put("coordy", getCoordy());
+
+        return map;
     }
 }
 
