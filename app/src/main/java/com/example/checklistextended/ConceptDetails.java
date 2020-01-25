@@ -183,6 +183,33 @@ public class ConceptDetails extends AppCompatActivity {
                 docRef.update("uses", info.getUses());
                 docRef.update("purpose", info.getPurpose());
                 Log.d(TAG,"Updated items on doc with id: " + info.getFireBaseId());
+                Intent intent = new Intent(v.getContext(), mapOfUnderstanding.class);
+                startActivity(intent);
+            }
+        });
+
+        final FloatingActionButton fabInMapRemove = (FloatingActionButton) findViewById(R.id.fabInDetailsRemove);
+        fabInMapRemove.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                db.collection("users").document("gQprmC2uxhPBXfV8uMxa")
+                        .collection("MapOfUnderstanding").document(info.getFireBaseId())
+                        .delete()
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Log.d(TAG, "DocumentSnapshot successfully deleted!");
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.w(TAG, "Error deleting document", e);
+                            }
+                        });
+
+                Log.d(TAG,"removed items on doc with id: " + info.getFireBaseId());
+                Intent intent = new Intent(v.getContext(), mapOfUnderstanding.class);
+                startActivity(intent);
             }
         });
     }
