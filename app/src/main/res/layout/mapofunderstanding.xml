@@ -54,13 +54,30 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@android:drawable/ic_dialog_email" />
+        app:srcCompat="@android:drawable/ic_input_get" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabInMapZoomout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|start"
+        android:layout_margin="@dimen/fab_margin"
+        app:srcCompat="@android:drawable/ic_media_previous" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabInMapZoomin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|start"
+        android:layout_marginBottom="80dp"
+        android:layout_marginLeft="16dp"
+        app:srcCompat="@android:drawable/ic_media_next" />
 
     <TextView
         android:id="@+id/xCoordOfTouch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="60dp"
+        android:layout_marginLeft="80dp"
         android:layout_marginTop="600dp"
         android:text="xCoordOfTouch" />
 
@@ -71,6 +88,14 @@
         android:layout_marginLeft="200dp"
         android:layout_marginTop="600dp"
         android:text="yCoordOfTouch" />
+
+    <TextView
+        android:id="@+id/ZoomLevelInMap"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="200dp"
+        android:layout_marginTop="650dp"
+        android:text="ZoomLevelInMap" />
 
     <RelativeLayout
         android:layout_width="match_parent"

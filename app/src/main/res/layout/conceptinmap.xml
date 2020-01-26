@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="0dp"
-        android:layout_marginTop="0dp"
+        android:layout_marginTop="20dp"
         android:text="More details" />
 
     <ImageView
@@ -26,7 +26,7 @@
         android:id="@+id/nameOnImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="0dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginLeft="2dp"
+        android:layout_marginTop="0dp"
         android:text="name" />
 </RelativeLayout>

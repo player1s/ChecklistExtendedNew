@@ -56,6 +56,7 @@ public class mapOfUnderstanding extends AppCompatActivity {
 
         final TextView xCoord = findViewById(R.id.xCoordOfTouch);
         final TextView yCoord = findViewById(R.id.yCoordOfTouch);
+        final TextView zoomLevelInMap = findViewById(R.id.ZoomLevelInMap);
         final CoordinatorLayout coordinatorLayoutInMap = findViewById(R.id.coordinatorlayoutForMap);
         final RelativeLayout conceptInMapSinglePiece = findViewById(R.id.conceptInMap);
         final RelativeLayout sub = findViewById(R.id.sub);
@@ -189,6 +190,37 @@ public class mapOfUnderstanding extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), weekPlan.class);
                 startActivity(intent);
+            }
+        });
+
+        final FloatingActionButton fabInMapZoomout = (FloatingActionButton) findViewById(R.id.fabInMapZoomout);
+        fabInMapZoomout.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                float scale = 1;
+                for(int i = 0; i<inflatedElements.size();i++)
+                {
+                    inflatedElements.get(i).setScaleX(inflatedElements.get(i).getScaleX()/(float)1.2);
+                    inflatedElements.get(i).setScaleY(inflatedElements.get(i).getScaleY()/(float)1.2);
+                    Log.d(TAG,"Zooming in, scale is : " + inflatedElements.get(i).getScaleY() +" " + inflatedElements.get(i).getScaleX());
+                    scale = inflatedElements.get(i).getScaleX();
+                }
+                zoomLevelInMap.setText(String.valueOf(scale));
+            }
+        });
+
+        final FloatingActionButton fabInMapZoomin = (FloatingActionButton) findViewById(R.id.fabInMapZoomin);
+        fabInMapZoomin.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                float scale = 1;
+
+                for(int i = 0; i<inflatedElements.size();i++)
+                {
+                    inflatedElements.get(i).setScaleX(inflatedElements.get(i).getScaleX()*(float)1.2);
+                    inflatedElements.get(i).setScaleY(inflatedElements.get(i).getScaleY()*(float)1.2);
+                    Log.d(TAG,"Zooming in, scale is : " + inflatedElements.get(i).getScaleY() +" " + inflatedElements.get(i).getScaleX());
+                    scale = inflatedElements.get(i).getScaleX();
+                }
+                zoomLevelInMap.setText(String.valueOf(scale));
             }
         });
 
