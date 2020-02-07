@@ -48,6 +48,7 @@ public class mapOfUnderstanding extends AppCompatActivity {
     final FirebaseFirestore db = FirebaseFirestore.getInstance();
     final CollectionReference colRef = db.collection("users").document("gQprmC2uxhPBXfV8uMxa")
             .collection("MapOfUnderstanding");
+    final int distanceForScroll = 400;
 
 
     @Override
@@ -56,8 +57,8 @@ public class mapOfUnderstanding extends AppCompatActivity {
         setContentView(R.layout.mapofunderstanding);
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        int height = displayMetrics.heightPixels;
-        int width = displayMetrics.widthPixels;
+        final int height = displayMetrics.heightPixels;
+        final int width = displayMetrics.widthPixels;
         final CoordsContainer screen = new CoordsContainer(400,400,400+width,400,400,400+height,400+width,400+height);
 
         final TextView xCoord = findViewById(R.id.xCoordOfTouch);
@@ -105,15 +106,24 @@ public class mapOfUnderstanding extends AppCompatActivity {
                                 conceptModel.setCoordy((long)document.get("coordy"));
                                 conceptModel.setFireBaseId(document.getId());
                                 conceptList.add(conceptModel);
-
                                 final View inflatedConcept = LayoutInflater.from(getApplicationContext()).inflate(R.layout.conceptinmap,viewGroup,false);
-                                addToExistingTouchListener(inflatedConcept,coordinatorLayoutInMap);
-                                inflatedConcept.setId(View.generateViewId());
-                                Log.d(TAG,"Generated View: " + inflatedConcept.getId());
-                                inflatedElements.add(inflatedConcept);
-                                viewGroup.addView(inflatedConcept);
-                                inflatedConcept.setX((long)document.get("coordx"));
-                                inflatedConcept.setY((long)document.get("coordy"));
+
+                                //check if the item is within the screen
+                                if(conceptModel.getCoordx()>=screen.getCtlx() && conceptModel.getCoordy()>=screen.getCtly() &&
+                                        conceptModel.getCoordx()<=screen.getCtrx() && conceptModel.getCoordy()>=screen.getCtry() &&
+                                        conceptModel.getCoordx()>=screen.getCblx() && conceptModel.getCoordy()<=screen.getCbly() &&
+                                        conceptModel.getCoordx()<=screen.getCbrx() && conceptModel.getCoordy()<=screen.getCbry())
+                                {
+                                    addToExistingTouchListener(inflatedConcept,coordinatorLayoutInMap);
+                                    inflatedConcept.setId(View.generateViewId());
+                                    Log.d(TAG,"Generated View: " + inflatedConcept.getId());
+                                    inflatedElements.add(inflatedConcept);
+                                    viewGroup.addView(inflatedConcept);
+                                    inflatedConcept.setX((long)document.get("coordx")- screen.getCtlx());
+                                    inflatedConcept.setY((long)document.get("coordy")- screen.getCtly());
+                                }
+
+
 
                                 if (inflatedConcept instanceof ViewGroup) {
                                     Log.d(TAG,"Generated View is part of viewgroup " + inflatedConcept.getId());
@@ -169,6 +179,58 @@ public class mapOfUnderstanding extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), weekPlan.class);
                 startActivity(intent);
+            }
+        });
+        final FloatingActionButton topScrollButtol = (FloatingActionButton) findViewById(R.id.fabScrollUpInMap);
+        topScrollButtol.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                screen.setCtlx(screen.getCtlx());
+                screen.setCtly(screen.getCtly()-distanceForScroll);
+                screen.setCtrx(screen.getCtrx());
+                screen.setCtry(screen.getCtry()-distanceForScroll);
+                screen.setCblx(screen.getCblx());
+                screen.setCbly(screen.getCbly()-distanceForScroll);
+                screen.setCbrx(screen.getCbrx());
+                screen.setCbry(screen.getCbry()-distanceForScroll);
+            }
+        });
+        final FloatingActionButton rightScrollButtol = (FloatingActionButton) findViewById(R.id.fabScrollRightInMap);
+        rightScrollButtol.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                screen.setCtlx(screen.getCtlx()+distanceForScroll);
+                screen.setCtly(screen.getCtly());
+                screen.setCtrx(screen.getCtrx()+distanceForScroll);
+                screen.setCtry(screen.getCtry());
+                screen.setCblx(screen.getCblx()+distanceForScroll);
+                screen.setCbly(screen.getCbly());
+                screen.setCbrx(screen.getCbrx()+distanceForScroll);
+                screen.setCbry(screen.getCbry());
+            }
+        });
+        final FloatingActionButton downScrollButtol = (FloatingActionButton) findViewById(R.id.fabScrollDownInMap);
+        downScrollButtol.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                screen.setCtlx(screen.getCtlx());
+                screen.setCtly(screen.getCtly()+distanceForScroll);
+                screen.setCtrx(screen.getCtrx());
+                screen.setCtry(screen.getCtry()+distanceForScroll);
+                screen.setCblx(screen.getCblx());
+                screen.setCbly(screen.getCbly()+distanceForScroll);
+                screen.setCbrx(screen.getCbrx());
+                screen.setCbry(screen.getCbry()+distanceForScroll);
+            }
+        });
+        final FloatingActionButton leftScrollButtol = (FloatingActionButton) findViewById(R.id.fabScrollLeftInMap);
+        leftScrollButtol.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                screen.setCtlx(screen.getCtlx()-distanceForScroll);
+                screen.setCtly(screen.getCtly());
+                screen.setCtrx(screen.getCtrx()-distanceForScroll);
+                screen.setCtry(screen.getCtry());
+                screen.setCblx(screen.getCblx()-distanceForScroll);
+                screen.setCbly(screen.getCbly());
+                screen.setCbrx(screen.getCbrx()-distanceForScroll);
+                screen.setCbry(screen.getCbry());
             }
         });
 
