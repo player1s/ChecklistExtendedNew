@@ -5,6 +5,7 @@ import android.content.ClipDescription;
 import android.content.Intent;
 import android.graphics.Canvas;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.DragEvent;
 import android.view.LayoutInflater;
@@ -48,15 +49,19 @@ public class mapOfUnderstanding extends AppCompatActivity {
     final CollectionReference colRef = db.collection("users").document("gQprmC2uxhPBXfV8uMxa")
             .collection("MapOfUnderstanding");
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState)  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.mapofunderstanding);
-
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int height = displayMetrics.heightPixels;
+        int width = displayMetrics.widthPixels;
+        final CoordsContainer screen = new CoordsContainer(400,400,400+width,400,400,400+height,400+width,400+height);
 
         final TextView xCoord = findViewById(R.id.xCoordOfTouch);
         final TextView yCoord = findViewById(R.id.yCoordOfTouch);
-        final TextView zoomLevelInMap = findViewById(R.id.ZoomLevelInMap);
         final CoordinatorLayout coordinatorLayoutInMap = findViewById(R.id.coordinatorlayoutForMap);
         final RelativeLayout conceptInMapSinglePiece = findViewById(R.id.conceptInMap);
         final RelativeLayout sub = findViewById(R.id.sub);
@@ -71,8 +76,10 @@ public class mapOfUnderstanding extends AppCompatActivity {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    xCoord.setText(String.valueOf(event.getX()) + " x");
-                    yCoord.setText(String.valueOf(event.getY()) + " y");
+                    int tappedCoordInMapx = (int) event.getX() + screen.getCtlx();
+                    int tappedCoordInMapy = (int) event.getY() + screen.getCtly();
+                    xCoord.setText(tappedCoordInMapx + " x");
+                    yCoord.setText(tappedCoordInMapy + " y");
 
                 }
                 return true;
@@ -129,35 +136,7 @@ public class mapOfUnderstanding extends AppCompatActivity {
                         }
                     }
                 });
-/*
-        for (int i = 0; i<conceptList.size();i++)
-        {
-            Log.d(TAG, "element: "+ i + conceptList.get(i).getName() + conceptList.get(i).getDefinition() + conceptList.get(i).getGlossary() + conceptList.get(i).getThingsItsBuiltOf()
-                    + conceptList.get(i).getPlans() + conceptList.get(i).getUses() + conceptList.get(i).getPurpose() + conceptList.get(i).getCoordx() + conceptList.get(i).getCoordy());
-        }
 
- */
-/*
-        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        Log.d(TAG, "DocumentSnapshot data: " + document.get("CoordY"));
-                        conceptModel conceptModel = new conceptModel();
-                        conceptModel.setName((String)document.get("name"));
-                        conceptList.add(conceptModel);
-
-                    } else {
-                        Log.d(TAG, "No such document");
-                    }
-                } else {
-                    Log.d(TAG, "get failed with ", task.getException());
-                }
-            }
-        });
-*/
         //set up the buttons on the toolbar
         Button btnTimeLineInMap = (Button) findViewById(R.id.btnTimeLineInMap);
         btnTimeLineInMap.setOnClickListener(new View.OnClickListener() {
@@ -190,37 +169,6 @@ public class mapOfUnderstanding extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), weekPlan.class);
                 startActivity(intent);
-            }
-        });
-
-        final FloatingActionButton fabInMapZoomout = (FloatingActionButton) findViewById(R.id.fabInMapZoomout);
-        fabInMapZoomout.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                float scale = 1;
-                for(int i = 0; i<inflatedElements.size();i++)
-                {
-                    inflatedElements.get(i).setScaleX(inflatedElements.get(i).getScaleX()/(float)1.2);
-                    inflatedElements.get(i).setScaleY(inflatedElements.get(i).getScaleY()/(float)1.2);
-                    Log.d(TAG,"Zooming in, scale is : " + inflatedElements.get(i).getScaleY() +" " + inflatedElements.get(i).getScaleX());
-                    scale = inflatedElements.get(i).getScaleX();
-                }
-                zoomLevelInMap.setText(String.valueOf(scale));
-            }
-        });
-
-        final FloatingActionButton fabInMapZoomin = (FloatingActionButton) findViewById(R.id.fabInMapZoomin);
-        fabInMapZoomin.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                float scale = 1;
-
-                for(int i = 0; i<inflatedElements.size();i++)
-                {
-                    inflatedElements.get(i).setScaleX(inflatedElements.get(i).getScaleX()*(float)1.2);
-                    inflatedElements.get(i).setScaleY(inflatedElements.get(i).getScaleY()*(float)1.2);
-                    Log.d(TAG,"Zooming in, scale is : " + inflatedElements.get(i).getScaleY() +" " + inflatedElements.get(i).getScaleX());
-                    scale = inflatedElements.get(i).getScaleX();
-                }
-                zoomLevelInMap.setText(String.valueOf(scale));
             }
         });
 
