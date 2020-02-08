@@ -50,29 +50,35 @@ public class mapOfUnderstanding extends AppCompatActivity {
             .collection("MapOfUnderstanding");
     final int distanceForScroll = 400;
 
+    final CollectionReference docRef = db.collection("users").document("gQprmC2uxhPBXfV8uMxa")
+            .collection("MapOfUnderstanding");
+
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState)  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.mapofunderstanding);
+        final ViewGroup viewGroup = (ViewGroup) findViewById(android.R.id.content);
+        final CoordinatorLayout coordinatorLayoutInMap = findViewById(R.id.coordinatorlayoutForMap);
+
+        final TextView xCoord = findViewById(R.id.xCoordOfTouch);
+        final TextView yCoord = findViewById(R.id.yCoordOfTouch);
+        final RelativeLayout conceptInMapSinglePiece = findViewById(R.id.conceptInMap);
+        final RelativeLayout sub = findViewById(R.id.sub);
+        final ImageView image = findViewById(R.id.my_image_view);
+        Button buttonOnImage = findViewById(R.id.buttonOnImage);
+        final boolean[] isMapBtnPressed = {false};
+
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         final int height = displayMetrics.heightPixels;
         final int width = displayMetrics.widthPixels;
         final CoordsContainer screen = new CoordsContainer(400,400,400+width,400,400,400+height,400+width,400+height);
 
-        final TextView xCoord = findViewById(R.id.xCoordOfTouch);
-        final TextView yCoord = findViewById(R.id.yCoordOfTouch);
-        final CoordinatorLayout coordinatorLayoutInMap = findViewById(R.id.coordinatorlayoutForMap);
-        final RelativeLayout conceptInMapSinglePiece = findViewById(R.id.conceptInMap);
-        final RelativeLayout sub = findViewById(R.id.sub);
-        final ImageView image = findViewById(R.id.my_image_view);
-        Button buttonOnImage = findViewById(R.id.buttonOnImage);
-        final boolean[] isMapBtnPressed = {false};
-        final ViewGroup viewGroup = (ViewGroup) findViewById(android.R.id.content);
-        CollectionReference docRef = db.collection("users").document("gQprmC2uxhPBXfV8uMxa")
-                .collection("MapOfUnderstanding");
-
+        regenerateViews(screen, viewGroup, coordinatorLayoutInMap);
         View.OnTouchListener touchListenerForCoords = new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -88,64 +94,7 @@ public class mapOfUnderstanding extends AppCompatActivity {
         };
         coordinatorLayoutInMap.setOnTouchListener(touchListenerForCoords);
 
-        docRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d(TAG, document.getId() + " => " + document.getData());
-                                final conceptModel conceptModel = new conceptModel();
-                                conceptModel.setName((String)document.get("name"));
-                                conceptModel.setDefinition((String)document.get("definition"));
-                                conceptModel.setGlossary((String)document.get("glossary"));
-                                conceptModel.setThingsItsBuiltOf((String)document.get("thingsitsbuiltof"));
-                                conceptModel.setPlans((String)document.get("plans"));
-                                conceptModel.setUses((String)document.get("uses"));
-                                conceptModel.setPurpose((String)document.get("purpose"));
-                                conceptModel.setCoordx((long)document.get("coordx"));
-                                conceptModel.setCoordy((long)document.get("coordy"));
-                                conceptModel.setFireBaseId(document.getId());
-                                conceptList.add(conceptModel);
-                                final View inflatedConcept = LayoutInflater.from(getApplicationContext()).inflate(R.layout.conceptinmap,viewGroup,false);
 
-                                //check if the item is within the screen
-                                if(conceptModel.getCoordx()>=screen.getCtlx() && conceptModel.getCoordy()>=screen.getCtly() &&
-                                        conceptModel.getCoordx()<=screen.getCtrx() && conceptModel.getCoordy()>=screen.getCtry() &&
-                                        conceptModel.getCoordx()>=screen.getCblx() && conceptModel.getCoordy()<=screen.getCbly() &&
-                                        conceptModel.getCoordx()<=screen.getCbrx() && conceptModel.getCoordy()<=screen.getCbry())
-                                {
-                                    addToExistingTouchListener(inflatedConcept,coordinatorLayoutInMap);
-                                    inflatedConcept.setId(View.generateViewId());
-                                    Log.d(TAG,"Generated View: " + inflatedConcept.getId());
-                                    inflatedElements.add(inflatedConcept);
-                                    viewGroup.addView(inflatedConcept);
-                                    inflatedConcept.setX((long)document.get("coordx")- screen.getCtlx());
-                                    inflatedConcept.setY((long)document.get("coordy")- screen.getCtly());
-                                }
-
-
-
-                                if (inflatedConcept instanceof ViewGroup) {
-                                    Log.d(TAG,"Generated View is part of viewgroup " + inflatedConcept.getId());
-                                    ViewGroup viewGroup = (ViewGroup) inflatedConcept;
-                                    Button buttonOfChildConcept = (Button) viewGroup.getChildAt(0);
-                                    buttonOfChildConcept.setOnClickListener(new View.OnClickListener() {
-                                        public void onClick(View v) {
-                                            Intent intent = new Intent(v.getContext(), ConceptDetails.class);
-                                            intent.putExtra("baseInfo", conceptModel);
-                                            startActivity(intent);
-                                        }
-                                    });
-                                    TextView textOnConcept = (TextView) viewGroup.getChildAt(2);
-                                    textOnConcept.setText((String)document.get("name"));
-                                }
-
-                            }
-                        } else {
-                            Log.d(TAG, "Error getting documents: ", task.getException());
-                        }
-                    }
-                });
 
         //set up the buttons on the toolbar
         Button btnTimeLineInMap = (Button) findViewById(R.id.btnTimeLineInMap);
@@ -192,6 +141,8 @@ public class mapOfUnderstanding extends AppCompatActivity {
                 screen.setCbly(screen.getCbly()-distanceForScroll);
                 screen.setCbrx(screen.getCbrx());
                 screen.setCbry(screen.getCbry()-distanceForScroll);
+                removeAllViews(viewGroup);
+                regenerateViews(screen, viewGroup, coordinatorLayoutInMap);
             }
         });
         final FloatingActionButton rightScrollButtol = (FloatingActionButton) findViewById(R.id.fabScrollRightInMap);
@@ -205,6 +156,8 @@ public class mapOfUnderstanding extends AppCompatActivity {
                 screen.setCbly(screen.getCbly());
                 screen.setCbrx(screen.getCbrx()+distanceForScroll);
                 screen.setCbry(screen.getCbry());
+                removeAllViews(viewGroup);
+                regenerateViews(screen, viewGroup, coordinatorLayoutInMap);
             }
         });
         final FloatingActionButton downScrollButtol = (FloatingActionButton) findViewById(R.id.fabScrollDownInMap);
@@ -218,6 +171,8 @@ public class mapOfUnderstanding extends AppCompatActivity {
                 screen.setCbly(screen.getCbly()+distanceForScroll);
                 screen.setCbrx(screen.getCbrx());
                 screen.setCbry(screen.getCbry()+distanceForScroll);
+                removeAllViews(viewGroup);
+                regenerateViews(screen, viewGroup, coordinatorLayoutInMap);
             }
         });
         final FloatingActionButton leftScrollButtol = (FloatingActionButton) findViewById(R.id.fabScrollLeftInMap);
@@ -231,6 +186,8 @@ public class mapOfUnderstanding extends AppCompatActivity {
                 screen.setCbly(screen.getCbly());
                 screen.setCbrx(screen.getCbrx()-distanceForScroll);
                 screen.setCbry(screen.getCbry());
+                removeAllViews(viewGroup);
+                regenerateViews(screen, viewGroup, coordinatorLayoutInMap);
             }
         });
 
@@ -290,6 +247,79 @@ public class mapOfUnderstanding extends AppCompatActivity {
         });
 
 
+    }
+
+    private void regenerateViews(final CoordsContainer screen, final ViewGroup viewGroup, final CoordinatorLayout coordinatorLayoutInMap)
+    {
+        docRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        Log.d(TAG, document.getId() + " => " + document.getData());
+                        final conceptModel conceptModel = new conceptModel();
+                        conceptModel.setName((String)document.get("name"));
+                        conceptModel.setDefinition((String)document.get("definition"));
+                        conceptModel.setGlossary((String)document.get("glossary"));
+                        conceptModel.setThingsItsBuiltOf((String)document.get("thingsitsbuiltof"));
+                        conceptModel.setPlans((String)document.get("plans"));
+                        conceptModel.setUses((String)document.get("uses"));
+                        conceptModel.setPurpose((String)document.get("purpose"));
+                        conceptModel.setCoordx((long)document.get("coordx"));
+                        conceptModel.setCoordy((long)document.get("coordy"));
+                        conceptModel.setFireBaseId(document.getId());
+                        conceptList.add(conceptModel);
+                        final View inflatedConcept = LayoutInflater.from(getApplicationContext()).inflate(R.layout.conceptinmap,viewGroup,false);
+
+                        //check if the item is within the screen
+                        if(conceptModel.getCoordx()>=screen.getCtlx() && conceptModel.getCoordy()>=screen.getCtly() &&
+                                conceptModel.getCoordx()<=screen.getCtrx() && conceptModel.getCoordy()>=screen.getCtry() &&
+                                conceptModel.getCoordx()>=screen.getCblx() && conceptModel.getCoordy()<=screen.getCbly() &&
+                                conceptModel.getCoordx()<=screen.getCbrx() && conceptModel.getCoordy()<=screen.getCbry())
+                        {
+                            addToExistingTouchListener(inflatedConcept,coordinatorLayoutInMap);
+                            inflatedConcept.setId(View.generateViewId());
+                            Log.d(TAG,"Generated View: " + inflatedConcept.getId());
+                            inflatedElements.add(inflatedConcept);
+                            viewGroup.addView(inflatedConcept);
+                            inflatedConcept.setX((long)document.get("coordx")- screen.getCtlx());
+                            inflatedConcept.setY((long)document.get("coordy")- screen.getCtly());
+                            Log.d(TAG,"ctlx: " + screen.getCtlx());
+                            Log.d(TAG,"ctly: " + screen.getCtly());
+                        }
+
+
+
+                        if (inflatedConcept instanceof ViewGroup) {
+                            Log.d(TAG,"Generated View is part of viewgroup " + inflatedConcept.getId());
+                            ViewGroup viewGroup = (ViewGroup) inflatedConcept;
+                            Button buttonOfChildConcept = (Button) viewGroup.getChildAt(0);
+                            buttonOfChildConcept.setOnClickListener(new View.OnClickListener() {
+                                public void onClick(View v) {
+                                    Intent intent = new Intent(v.getContext(), ConceptDetails.class);
+                                    intent.putExtra("baseInfo", conceptModel);
+                                    startActivity(intent);
+                                }
+                            });
+                            TextView textOnConcept = (TextView) viewGroup.getChildAt(2);
+                            textOnConcept.setText((String)document.get("name"));
+                        }
+
+                    }
+                } else {
+                    Log.d(TAG, "Error getting documents: ", task.getException());
+                }
+            }
+        });
+    }
+
+    private void removeAllViews(final ViewGroup viewGroup)
+    {
+        for(int i = 0; i < inflatedElements.size();i++)
+        {
+            Log.d(TAG, "startend removing: ");
+            viewGroup.removeView(inflatedElements.get(i));
+        }
     }
 
     private void addToExistingTouchListener(final View vToAssign, final CoordinatorLayout coordinatorLayoutInMap)
