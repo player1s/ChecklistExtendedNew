@@ -52,6 +52,7 @@ public class mapOfUnderstanding extends AppCompatActivity {
 
     final CollectionReference docRef = db.collection("users").document("gQprmC2uxhPBXfV8uMxa")
             .collection("MapOfUnderstanding");
+    float zoomLevel = 1;
 
 
 
@@ -63,7 +64,6 @@ public class mapOfUnderstanding extends AppCompatActivity {
         setContentView(R.layout.mapofunderstanding);
         final ViewGroup viewGroup = (ViewGroup) findViewById(android.R.id.content);
         final CoordinatorLayout coordinatorLayoutInMap = findViewById(R.id.coordinatorlayoutForMap);
-
         final TextView xCoord = findViewById(R.id.xCoordOfTouch);
         final TextView yCoord = findViewById(R.id.yCoordOfTouch);
         final RelativeLayout conceptInMapSinglePiece = findViewById(R.id.conceptInMap);
@@ -71,13 +71,14 @@ public class mapOfUnderstanding extends AppCompatActivity {
         final ImageView image = findViewById(R.id.my_image_view);
         Button buttonOnImage = findViewById(R.id.buttonOnImage);
         final boolean[] isMapBtnPressed = {false};
-
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         final int height = displayMetrics.heightPixels;
         final int width = displayMetrics.widthPixels;
-        final CoordsContainer screen = new CoordsContainer(400,200,400+width,200,400,400+height,400+width,400+height);
-
+        final CoordsContainer screen = new CoordsContainer(0,0,+width,0,0,height,width,height);
+        System.out.println("center coords: " + screen.getCenterPointx() + " " + screen.getCenterPointy() + "while cbrx ans cbry is: " + screen.getCbrx() + " " + screen.getCbry() );
+        final TextView txtzoomlvl = findViewById(R.id.ZoomLevelInMap);
+        txtzoomlvl.setText(String.valueOf(zoomLevel));
         regenerateViews(screen, viewGroup, coordinatorLayoutInMap);
         View.OnTouchListener touchListenerForCoords = new View.OnTouchListener() {
             @Override
@@ -130,8 +131,8 @@ public class mapOfUnderstanding extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        final FloatingActionButton topScrollButtol = (FloatingActionButton) findViewById(R.id.fabScrollUpInMap);
-        topScrollButtol.setOnClickListener(new View.OnClickListener() {
+        final FloatingActionButton topScrollButton = (FloatingActionButton) findViewById(R.id.fabScrollUpInMap);
+        topScrollButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 screen.setCtlx(screen.getCtlx());
                 screen.setCtly(screen.getCtly()-distanceForScroll);
@@ -145,8 +146,8 @@ public class mapOfUnderstanding extends AppCompatActivity {
                 regenerateViews(screen, viewGroup, coordinatorLayoutInMap);
             }
         });
-        final FloatingActionButton rightScrollButtol = (FloatingActionButton) findViewById(R.id.fabScrollRightInMap);
-        rightScrollButtol.setOnClickListener(new View.OnClickListener() {
+        final FloatingActionButton rightScrollButton = (FloatingActionButton) findViewById(R.id.fabScrollRightInMap);
+        rightScrollButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 screen.setCtlx(screen.getCtlx()+distanceForScroll);
                 screen.setCtly(screen.getCtly());
@@ -160,8 +161,8 @@ public class mapOfUnderstanding extends AppCompatActivity {
                 regenerateViews(screen, viewGroup, coordinatorLayoutInMap);
             }
         });
-        final FloatingActionButton downScrollButtol = (FloatingActionButton) findViewById(R.id.fabScrollDownInMap);
-        downScrollButtol.setOnClickListener(new View.OnClickListener() {
+        final FloatingActionButton downScrollButton = (FloatingActionButton) findViewById(R.id.fabScrollDownInMap);
+        downScrollButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 screen.setCtlx(screen.getCtlx());
                 screen.setCtly(screen.getCtly()+distanceForScroll);
@@ -175,8 +176,8 @@ public class mapOfUnderstanding extends AppCompatActivity {
                 regenerateViews(screen, viewGroup, coordinatorLayoutInMap);
             }
         });
-        final FloatingActionButton leftScrollButtol = (FloatingActionButton) findViewById(R.id.fabScrollLeftInMap);
-        leftScrollButtol.setOnClickListener(new View.OnClickListener() {
+        final FloatingActionButton leftScrollButton = (FloatingActionButton) findViewById(R.id.fabScrollLeftInMap);
+        leftScrollButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 screen.setCtlx(screen.getCtlx()-distanceForScroll);
                 screen.setCtly(screen.getCtly());
@@ -186,6 +187,42 @@ public class mapOfUnderstanding extends AppCompatActivity {
                 screen.setCbly(screen.getCbly());
                 screen.setCbrx(screen.getCbrx()-distanceForScroll);
                 screen.setCbry(screen.getCbry());
+                removeAllViews(viewGroup);
+                regenerateViews(screen, viewGroup, coordinatorLayoutInMap);
+            }
+        });
+
+        final FloatingActionButton zoomInButton = (FloatingActionButton) findViewById(R.id.fabZoomInInMap);
+        zoomInButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                zoomLevel *= 1.2;
+                screen.setCtlx((int)(screen.getCtlx() * zoomLevel));
+                screen.setCtly((int)(screen.getCtly() * zoomLevel));
+                screen.setCtrx((int)(screen.getCtrx() * zoomLevel));
+                screen.setCtry((int)(screen.getCtry() * zoomLevel));
+                screen.setCblx((int)(screen.getCblx() * zoomLevel));
+                screen.setCbly((int)(screen.getCbly() * zoomLevel));
+                screen.setCbrx((int)(screen.getCbrx() * zoomLevel));
+                screen.setCbry((int)(screen.getCbry() * zoomLevel));
+                txtzoomlvl.setText(String.valueOf(zoomLevel));
+                removeAllViews(viewGroup);
+                regenerateViews(screen, viewGroup, coordinatorLayoutInMap);
+            }
+        });
+
+        final FloatingActionButton ZoomOutButton = (FloatingActionButton) findViewById(R.id.fabZoomOutInMap);
+        ZoomOutButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                zoomLevel /= 1.2;
+                screen.setCtlx((int)(screen.getCtlx() * zoomLevel));
+                screen.setCtly((int)(screen.getCtly() * zoomLevel));
+                screen.setCtrx((int)(screen.getCtrx() * zoomLevel));
+                screen.setCtry((int)(screen.getCtry() * zoomLevel));
+                screen.setCblx((int)(screen.getCblx() * zoomLevel));
+                screen.setCbly((int)(screen.getCbly() * zoomLevel));
+                screen.setCbrx((int)(screen.getCbrx() * zoomLevel));
+                screen.setCbry((int)(screen.getCbry() * zoomLevel));
+                txtzoomlvl.setText(String.valueOf(zoomLevel));
                 removeAllViews(viewGroup);
                 regenerateViews(screen, viewGroup, coordinatorLayoutInMap);
             }
@@ -251,10 +288,12 @@ public class mapOfUnderstanding extends AppCompatActivity {
 
     private void regenerateViews(final CoordsContainer screen, final ViewGroup viewGroup, final CoordinatorLayout coordinatorLayoutInMap)
     {
+
         docRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
+                    int[] coordarray = new int[2];
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         Log.d(TAG, document.getId() + " => " + document.getData());
                         final conceptModel conceptModel = new conceptModel();
@@ -284,10 +323,8 @@ public class mapOfUnderstanding extends AppCompatActivity {
                             viewGroup.addView(inflatedConcept);
                             inflatedConcept.setX((long)document.get("coordx")- screen.getCtlx());
                             inflatedConcept.setY((long)document.get("coordy")- screen.getCtly() - 198);
-                            Log.d(TAG,"ctlx: " + screen.getCtlx());
-                            Log.d(TAG,"ctly: " + screen.getCtly());
-                            Log.d(TAG,"ctlx set to: " + ((long)document.get("coordx")- screen.getCtlx()));
-                            Log.d(TAG,"ctly set to: " + ((long)document.get("coordy")- screen.getCtly()));
+                            coordarray = calculateNewPosition(screen,(int) conceptModel.getCoordx(),(int) conceptModel.getCoordy());
+                            Log.d(TAG,"elements of coordarray: " + coordarray[0] + " " + coordarray[1]);
                         }
 
 
@@ -313,6 +350,54 @@ public class mapOfUnderstanding extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private int[] calculateNewPosition(CoordsContainer screen, int firstx, int firsty)
+    {
+        double sidea;
+        double sideb;
+        double sidec;
+        double alpha;
+        double centerPointx = screen.getCenterPointx();
+        double centerPointy = screen.getCenterPointy();
+        int newcoordx = 0;
+        int newcoordy = 0;
+        int[] coordarray = new int[2];
+        System.out.println("Received: screen: " + centerPointx + " " + centerPointy);
+        System.out.println("Received: pointcoords: " + firstx + " " + firsty);
+        sidec = Math.sqrt(Math.pow(firstx,2) - 2*(firstx * centerPointx) + Math.pow(centerPointx,2) +
+                Math.pow(firsty,2) - 2*(firsty * centerPointy) + Math.pow(centerPointy,2));
+        System.out.println("distance between the tl corner and the middle of the screen is: " + sidec);
+        sidea = Math.abs(firstx - screen.getCenterPointx());
+        sideb = Math.abs(firsty - screen.getCenterPointy());
+        alpha = Math.sin(sidea/sidec);
+        sidec *= zoomLevel;
+        sidea = (Math.sin(alpha)*sidec);
+        sideb = Math.pow(sidec,2) - Math.pow(sidea,2);
+        sideb = Math.sqrt(sideb);
+        if(firstx < centerPointx && firsty < centerPointy)
+        {
+            newcoordx = (int) (centerPointx - sideb);
+            newcoordy = (int) (centerPointy - sidea);
+        };
+        if(firstx > centerPointx && firsty < centerPointy)
+        {
+            newcoordx = (int) (centerPointx + sideb);
+            newcoordy = (int) (centerPointy - sidea);
+        };
+        if(firstx < centerPointx && firsty > centerPointy)
+        {
+            newcoordx = (int) (centerPointx - sideb);
+            newcoordy = (int) (centerPointy + sidea);
+        };
+        if(firstx > centerPointx && firsty > centerPointy)
+        {
+            newcoordx = (int) (centerPointx + sideb);
+            newcoordy = (int) (centerPointy + sidea);
+        }
+        coordarray[0] = newcoordx;
+        coordarray[1] = newcoordy;
+        return coordarray;
     }
 
     private void removeAllViews(final ViewGroup viewGroup)
