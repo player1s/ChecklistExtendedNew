@@ -76,7 +76,7 @@ public class mapOfUnderstanding extends AppCompatActivity {
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         final int height = displayMetrics.heightPixels;
         final int width = displayMetrics.widthPixels;
-        final CoordsContainer screen = new CoordsContainer(400,400,400+width,400,400,400+height,400+width,400+height);
+        final CoordsContainer screen = new CoordsContainer(400,200,400+width,200,400,400+height,400+width,400+height);
 
         regenerateViews(screen, viewGroup, coordinatorLayoutInMap);
         View.OnTouchListener touchListenerForCoords = new View.OnTouchListener() {
@@ -221,7 +221,7 @@ public class mapOfUnderstanding extends AppCompatActivity {
                         });
 
 
-                addToExistingTouchListener(inflatedConcept,coordinatorLayoutInMap);
+                addToExistingTouchListener(inflatedConcept,coordinatorLayoutInMap, screen);
                 viewGroup.addView(inflatedConcept);
 
 
@@ -277,15 +277,17 @@ public class mapOfUnderstanding extends AppCompatActivity {
                                 conceptModel.getCoordx()>=screen.getCblx() && conceptModel.getCoordy()<=screen.getCbly() &&
                                 conceptModel.getCoordx()<=screen.getCbrx() && conceptModel.getCoordy()<=screen.getCbry())
                         {
-                            addToExistingTouchListener(inflatedConcept,coordinatorLayoutInMap);
-                            inflatedConcept.setId(View.generateViewId());
+                            addToExistingTouchListener(inflatedConcept,coordinatorLayoutInMap, screen);
+                            inflatedConcept.setId(Integer.valueOf(conceptModel.getFireBaseId()));
                             Log.d(TAG,"Generated View: " + inflatedConcept.getId());
                             inflatedElements.add(inflatedConcept);
                             viewGroup.addView(inflatedConcept);
                             inflatedConcept.setX((long)document.get("coordx")- screen.getCtlx());
-                            inflatedConcept.setY((long)document.get("coordy")- screen.getCtly());
+                            inflatedConcept.setY((long)document.get("coordy")- screen.getCtly() - 198);
                             Log.d(TAG,"ctlx: " + screen.getCtlx());
                             Log.d(TAG,"ctly: " + screen.getCtly());
+                            Log.d(TAG,"ctlx set to: " + ((long)document.get("coordx")- screen.getCtlx()));
+                            Log.d(TAG,"ctly set to: " + ((long)document.get("coordy")- screen.getCtly()));
                         }
 
 
@@ -322,7 +324,7 @@ public class mapOfUnderstanding extends AppCompatActivity {
         }
     }
 
-    private void addToExistingTouchListener(final View vToAssign, final CoordinatorLayout coordinatorLayoutInMap)
+    private void addToExistingTouchListener(final View vToAssign, final CoordinatorLayout coordinatorLayoutInMap, final CoordsContainer screen)
     {
         View.OnLongClickListener longClickListener = (new View.OnLongClickListener()
         {
@@ -345,8 +347,8 @@ public class mapOfUnderstanding extends AppCompatActivity {
                                     final DocumentReference docRef = colRef.document(conceptList.get(i).getFireBaseId());
                                     conceptList.get(i).setCoordx((long)event.getX());
                                     conceptList.get(i).setCoordy((long)event.getY());
-                                    docRef.update("coordx",  conceptList.get(i).getCoordx());
-                                    docRef.update("coordy",  conceptList.get(i).getCoordy());
+                                    docRef.update("coordx",  conceptList.get(i).getCoordx() + screen.getCtlx());
+                                    docRef.update("coordy",  conceptList.get(i).getCoordy() + screen.getCtly());
                                     break;
                                 }
                             }
