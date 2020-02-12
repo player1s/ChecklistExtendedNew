@@ -48,7 +48,7 @@ public class mapOfUnderstanding extends AppCompatActivity {
     final FirebaseFirestore db = FirebaseFirestore.getInstance();
     final CollectionReference colRef = db.collection("users").document("gQprmC2uxhPBXfV8uMxa")
             .collection("MapOfUnderstanding");
-    final int distanceForScroll = 400;
+    final int distanceForScroll = 50;
 
     final CollectionReference docRef = db.collection("users").document("gQprmC2uxhPBXfV8uMxa")
             .collection("MapOfUnderstanding");
@@ -75,7 +75,7 @@ public class mapOfUnderstanding extends AppCompatActivity {
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         final int height = displayMetrics.heightPixels;
         final int width = displayMetrics.widthPixels;
-        final CoordsContainer screen = new CoordsContainer(0,0,+width,0,0,height,width,height);
+        final CoordsContainer screen = new CoordsContainer(0,0,width,0,0,height,width,height);
         System.out.println("center coords: " + screen.getCenterPointx() + " " + screen.getCenterPointy() + "while cbrx ans cbry is: " + screen.getCbrx() + " " + screen.getCbry() );
         final TextView txtzoomlvl = findViewById(R.id.ZoomLevelInMap);
         txtzoomlvl.setText(String.valueOf(zoomLevel));
@@ -358,23 +358,50 @@ public class mapOfUnderstanding extends AppCompatActivity {
         double sideb;
         double sidec;
         double alpha;
+        double pre1alpha;
+        double pre2alpha;
+        double post1alpha;
+        double post2alpha;
+        double sideasquare;
+        double sidebsquare;
+        double sidecsquare;
         double centerPointx = screen.getCenterPointx();
         double centerPointy = screen.getCenterPointy();
         int newcoordx = 0;
         int newcoordy = 0;
         int[] coordarray = new int[2];
-        System.out.println("Received: screen: " + centerPointx + " " + centerPointy);
+        System.out.println("Received: screenCenterPoint: " + centerPointx + " " + centerPointy);
         System.out.println("Received: pointcoords: " + firstx + " " + firsty);
         sidec = Math.sqrt(Math.pow(firstx,2) - 2*(firstx * centerPointx) + Math.pow(centerPointx,2) +
                 Math.pow(firsty,2) - 2*(firsty * centerPointy) + Math.pow(centerPointy,2));
-        System.out.println("distance between the tl corner and the middle of the screen is: " + sidec);
+        System.out.println("distance between the tl corner and the middle of the screen is (sidec): " + sidec);
         sidea = Math.abs(firstx - screen.getCenterPointx());
         sideb = Math.abs(firsty - screen.getCenterPointy());
-        alpha = Math.sin(sidea/sidec);
+        System.out.println("sidea and sideb before change: " + sidea + " " + sideb);
+/*
+        alpha = Math.toRadians((sidea*sidea+sideb*sideb-sidec*sidec)/2 * sidea * sideb);
+        sideasquare = sidea * sidea;
+        sidebsquare = sideb * sideb;
+        sidecsquare = sidec * sidec;
+        System.out.println("squares: " + sideasquare + " " + sidebsquare + " " + sidecsquare);
+        pre1alpha = sideasquare+sidebsquare-sidecsquare;
+        pre2alpha = 2 * sidea * sideb;
+        post1alpha = Math.toDegrees(Math.cos(alpha));
+        post2alpha = Math.toDegrees(Math.acos(alpha));
+        System.out.println("degree of corner opposite to sidec ( should be 90, 1 or so) and things its built of and cosd, acosd: "
+                + alpha + " " + pre1alpha + " " + pre2alpha + " " + post1alpha + " " + post2alpha);
+
+
+ */
+        alpha = Math.asin(Math.toRadians(sidea/sidec));
+        System.out.println("degree of corner of line from tl to center and horizontal line: " + Math.toDegrees(alpha));
         sidec *= zoomLevel;
         sidea = (Math.sin(alpha)*sidec);
         sideb = Math.pow(sidec,2) - Math.pow(sidea,2);
         sideb = Math.sqrt(sideb);
+        System.out.println("sidea and sideb and sidec after change: " + sidea + " " + sideb + " " + sidec);
+
+
         if(firstx < centerPointx && firsty < centerPointy)
         {
             newcoordx = (int) (centerPointx - sideb);
@@ -404,9 +431,9 @@ public class mapOfUnderstanding extends AppCompatActivity {
     {
         for(int i = 0; i < inflatedElements.size();i++)
         {
-            Log.d(TAG, "startend removing: ");
             viewGroup.removeView(inflatedElements.get(i));
         }
+        Log.d(TAG, "Current amount of items: " + inflatedElements.size());
     }
 
     private void addToExistingTouchListener(final View vToAssign, final CoordinatorLayout coordinatorLayoutInMap, final CoordsContainer screen)
