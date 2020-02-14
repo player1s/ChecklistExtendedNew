@@ -354,8 +354,8 @@ public class mapOfUnderstanding extends AppCompatActivity {
 
     private int[] calculateNewPosition(CoordsContainer screen, int firstx, int firsty)
     {
-        double sidea;
-        double sideb;
+        double sidey;
+        double sidex;
         double sidec;
         double alpha;
         double pre1alpha;
@@ -370,60 +370,21 @@ public class mapOfUnderstanding extends AppCompatActivity {
         int newcoordx = 0;
         int newcoordy = 0;
         int[] coordarray = new int[2];
-        System.out.println("Received: screenCenterPoint: " + centerPointx + " " + centerPointy);
-        System.out.println("Received: pointcoords: " + firstx + " " + firsty);
-        sidec = Math.sqrt(Math.pow(firstx,2) - 2*(firstx * centerPointx) + Math.pow(centerPointx,2) +
-                Math.pow(firsty,2) - 2*(firsty * centerPointy) + Math.pow(centerPointy,2));
-        System.out.println("distance between the tl corner and the middle of the screen is (sidec): " + sidec);
-        sidea = Math.abs(firstx - screen.getCenterPointx());
-        sideb = Math.abs(firsty - screen.getCenterPointy());
-        System.out.println("sidea and sideb before change: " + sidea + " " + sideb);
-/*
-        alpha = Math.toRadians((sidea*sidea+sideb*sideb-sidec*sidec)/2 * sidea * sideb);
-        sideasquare = sidea * sidea;
-        sidebsquare = sideb * sideb;
-        sidecsquare = sidec * sidec;
-        System.out.println("squares: " + sideasquare + " " + sidebsquare + " " + sidecsquare);
-        pre1alpha = sideasquare+sidebsquare-sidecsquare;
-        pre2alpha = 2 * sidea * sideb;
-        post1alpha = Math.toDegrees(Math.cos(alpha));
-        post2alpha = Math.toDegrees(Math.acos(alpha));
-        System.out.println("degree of corner opposite to sidec ( should be 90, 1 or so) and things its built of and cosd, acosd: "
-                + alpha + " " + pre1alpha + " " + pre2alpha + " " + post1alpha + " " + post2alpha);
+        Log.d(TAG, "centerPointx and centerPointy: " + centerPointx + " " + centerPointy);
+        Log.d(TAG, "firstx and firsty: " + firstx + " " + firsty);
+        sidey = Math.abs(centerPointy - firsty);
+        sidex = Math.abs(centerPointx - firstx);
+        Log.d(TAG, "sidey and sidex: " + sidey + " " + sidex);
+        sidec = Math.sqrt(sidey * sidey + sidex * sidex);
+        Log.d(TAG, "sidec: " + sidec);
+        alpha = Math.toDegrees(Math.asin(sidey/sidec));
+        Log.d(TAG, "alpha: " + alpha);
 
-
- */
-        alpha = Math.asin(Math.toRadians(sidea/sidec));
-        System.out.println("degree of corner of line from tl to center and horizontal line: " + Math.toDegrees(alpha));
         sidec *= zoomLevel;
-        sidea = (Math.sin(alpha)*sidec);
-        sideb = Math.pow(sidec,2) - Math.pow(sidea,2);
-        sideb = Math.sqrt(sideb);
-        System.out.println("sidea and sideb and sidec after change: " + sidea + " " + sideb + " " + sidec);
+        Log.d(TAG, "modified sidec: " + sidec);
 
+        
 
-        if(firstx < centerPointx && firsty < centerPointy)
-        {
-            newcoordx = (int) (centerPointx - sideb);
-            newcoordy = (int) (centerPointy - sidea);
-        };
-        if(firstx > centerPointx && firsty < centerPointy)
-        {
-            newcoordx = (int) (centerPointx + sideb);
-            newcoordy = (int) (centerPointy - sidea);
-        };
-        if(firstx < centerPointx && firsty > centerPointy)
-        {
-            newcoordx = (int) (centerPointx - sideb);
-            newcoordy = (int) (centerPointy + sidea);
-        };
-        if(firstx > centerPointx && firsty > centerPointy)
-        {
-            newcoordx = (int) (centerPointx + sideb);
-            newcoordy = (int) (centerPointy + sidea);
-        }
-        coordarray[0] = newcoordx;
-        coordarray[1] = newcoordy;
         return coordarray;
     }
 
@@ -461,6 +422,8 @@ public class mapOfUnderstanding extends AppCompatActivity {
                                     conceptList.get(i).setCoordy((long)event.getY());
                                     docRef.update("coordx",  conceptList.get(i).getCoordx() + screen.getCtlx());
                                     docRef.update("coordy",  conceptList.get(i).getCoordy() + screen.getCtly());
+                                    Log.d(TAG,"View put to coords: "+(long)event.getX()+" " +(long)event.getY());
+                                    calculateNewPosition(screen, (int) event.getX(), (int) event.getY());
                                     break;
                                 }
                             }
