@@ -331,6 +331,8 @@ public class mapOfUnderstanding extends AppCompatActivity {
                             Log.d(TAG,"elements of coordarray: " + coordarray[0] + " " + coordarray[1]);
                             inflatedConcept.setX(coordarray[0]);
                             inflatedConcept.setY(coordarray[1]);
+                            inflatedConcept.setScaleX(zoomLevel);
+                            inflatedConcept.setScaleY(zoomLevel);
                         }
 
 
@@ -432,6 +434,7 @@ public class mapOfUnderstanding extends AppCompatActivity {
             viewGroup.removeView(inflatedElements.get(i));
         }
         Log.d(TAG, "Current amount of items: " + inflatedElements.size());
+        inflatedElements.clear();
     }
 
     private void addToExistingTouchListener(final View vToAssign, final CoordinatorLayout coordinatorLayoutInMap, final CoordsContainer screen)
