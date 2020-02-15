@@ -24,6 +24,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Room;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -48,11 +49,12 @@ public class mapOfUnderstanding extends AppCompatActivity {
     final FirebaseFirestore db = FirebaseFirestore.getInstance();
     final CollectionReference colRef = db.collection("users").document("gQprmC2uxhPBXfV8uMxa")
             .collection("MapOfUnderstanding");
-    final int distanceForScroll = 50;
+    final int distanceForScroll = 200;
 
     final CollectionReference docRef = db.collection("users").document("gQprmC2uxhPBXfV8uMxa")
             .collection("MapOfUnderstanding");
     float zoomLevel = 1;
+    //final appDatabase.AppDatabase persistentdb = Room.databaseBuilder(getApplicationContext(),appDatabase.AppDatabase.class, "database-name").build();
 
 
 
@@ -313,6 +315,7 @@ public class mapOfUnderstanding extends AppCompatActivity {
                         conceptModel.setFireBaseId(document.getId());
                         conceptList.add(conceptModel);
                         final View inflatedConcept = LayoutInflater.from(getApplicationContext()).inflate(R.layout.conceptinmap,viewGroup,false);
+                        //persistentdb.conceptDao().insertSingleConcept(conceptModel.getFireBaseId(),conceptModel.getName());
 
                         //check if the item is within the screen
                         if(conceptModel.getCoordx()>=screen.getCtlx() && conceptModel.getCoordy()>=screen.getCtly() &&
@@ -329,8 +332,8 @@ public class mapOfUnderstanding extends AppCompatActivity {
                             inflatedConcept.setY((long)document.get("coordy")- screen.getCtly() - 198);
                             coordarray = calculateNewPosition(screen,(int) conceptModel.getCoordx(),(int) conceptModel.getCoordy());
                             Log.d(TAG,"elements of coordarray: " + coordarray[0] + " " + coordarray[1]);
-                            inflatedConcept.setX(coordarray[0]);
-                            inflatedConcept.setY(coordarray[1]);
+                            inflatedConcept.setX(coordarray[0]- screen.getCtlx());
+                            inflatedConcept.setY(coordarray[1]- screen.getCtly() - 198);
                             inflatedConcept.setScaleX(zoomLevel);
                             inflatedConcept.setScaleY(zoomLevel);
                         }
@@ -358,6 +361,8 @@ public class mapOfUnderstanding extends AppCompatActivity {
                 }
             }
         });
+        //String elementsInPersistence = persistentdb.conceptDao().getAll().toString();
+        //Log.d(TAG, "got these: " + elementsInPersistence);
     }
 
     private int[] calculateNewPosition(CoordsContainer screen, int firstx, int firsty)
@@ -401,25 +406,25 @@ public class mapOfUnderstanding extends AppCompatActivity {
         if(firstx <= centerPointx && firsty <= centerPointy)
         {
             newcoordx = (int) (centerPointx - sidex);
-            newcoordy = (int) (centerPointy - sidey - 198);
+            newcoordy = (int) (centerPointy - sidey);
         }
 
         if(firstx >= centerPointx && firsty <= centerPointy)
         {
             newcoordx = (int) (centerPointx + sidex);
-            newcoordy = (int) (centerPointy - sidey - 198);
+            newcoordy = (int) (centerPointy - sidey);
         }
 
         if(firstx < centerPointx && firsty > centerPointy)
         {
             newcoordx = (int) (centerPointx - sidex);
-            newcoordy = (int) (centerPointy + sidey - 198);
+            newcoordy = (int) (centerPointy + sidey);
         }
 
         if(firstx > centerPointx && firsty > centerPointy)
         {
             newcoordx = (int) (centerPointx + sidex);
-            newcoordy = (int) (centerPointy + sidey - 198);
+            newcoordy = (int) (centerPointy + sidey);
         }
         Log.d(TAG, "coords to return: " + newcoordx + " " + newcoordy);
         coordarray[0] = newcoordx;

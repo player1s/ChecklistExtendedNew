@@ -2,6 +2,7 @@ package com.example.checklistextended;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.room.Room;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -30,6 +31,8 @@ public class ConceptDetails extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_concept_details);
         final conceptModel info = (conceptModel) getIntent().getSerializableExtra("baseInfo");
+
+
 
         EditText name = findViewById(R.id.editNameInDetails);
         EditText definition = findViewById(R.id.editDefinitionInDetails);
@@ -183,6 +186,7 @@ public class ConceptDetails extends AppCompatActivity {
                 docRef.update("uses", info.getUses());
                 docRef.update("purpose", info.getPurpose());
                 Log.d(TAG,"Updated items on doc with id: " + info.getFireBaseId());
+
                 Intent intent = new Intent(v.getContext(), mapOfUnderstanding.class);
                 startActivity(intent);
             }
