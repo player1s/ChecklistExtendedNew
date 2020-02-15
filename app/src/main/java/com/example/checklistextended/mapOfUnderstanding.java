@@ -196,6 +196,7 @@ public class mapOfUnderstanding extends AppCompatActivity {
         zoomInButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 zoomLevel *= 1.2;
+                /*
                 screen.setCtlx((int)(screen.getCtlx() * zoomLevel));
                 screen.setCtly((int)(screen.getCtly() * zoomLevel));
                 screen.setCtrx((int)(screen.getCtrx() * zoomLevel));
@@ -204,6 +205,7 @@ public class mapOfUnderstanding extends AppCompatActivity {
                 screen.setCbly((int)(screen.getCbly() * zoomLevel));
                 screen.setCbrx((int)(screen.getCbrx() * zoomLevel));
                 screen.setCbry((int)(screen.getCbry() * zoomLevel));
+                */
                 txtzoomlvl.setText(String.valueOf(zoomLevel));
                 removeAllViews(viewGroup);
                 regenerateViews(screen, viewGroup, coordinatorLayoutInMap);
@@ -214,6 +216,7 @@ public class mapOfUnderstanding extends AppCompatActivity {
         ZoomOutButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 zoomLevel /= 1.2;
+                /*
                 screen.setCtlx((int)(screen.getCtlx() * zoomLevel));
                 screen.setCtly((int)(screen.getCtly() * zoomLevel));
                 screen.setCtrx((int)(screen.getCtrx() * zoomLevel));
@@ -222,6 +225,7 @@ public class mapOfUnderstanding extends AppCompatActivity {
                 screen.setCbly((int)(screen.getCbly() * zoomLevel));
                 screen.setCbrx((int)(screen.getCbrx() * zoomLevel));
                 screen.setCbry((int)(screen.getCbry() * zoomLevel));
+                */
                 txtzoomlvl.setText(String.valueOf(zoomLevel));
                 removeAllViews(viewGroup);
                 regenerateViews(screen, viewGroup, coordinatorLayoutInMap);
@@ -325,6 +329,8 @@ public class mapOfUnderstanding extends AppCompatActivity {
                             inflatedConcept.setY((long)document.get("coordy")- screen.getCtly() - 198);
                             coordarray = calculateNewPosition(screen,(int) conceptModel.getCoordx(),(int) conceptModel.getCoordy());
                             Log.d(TAG,"elements of coordarray: " + coordarray[0] + " " + coordarray[1]);
+                            inflatedConcept.setX(coordarray[0]);
+                            inflatedConcept.setY(coordarray[1]);
                         }
 
 
@@ -383,8 +389,39 @@ public class mapOfUnderstanding extends AppCompatActivity {
         sidec *= zoomLevel;
         Log.d(TAG, "modified sidec: " + sidec);
 
-        
+        alpha = Math.sin(Math.toRadians(alpha));
+        Log.d(TAG, "alpha updated: " + alpha);
 
+        sidey = alpha * sidec;
+        sidex = Math.sqrt(sidec * sidec - sidey * sidey);
+        Log.d(TAG, "updated sidey and sidex: " + sidey + " " + sidex);
+
+        if(firstx <= centerPointx && firsty <= centerPointy)
+        {
+            newcoordx = (int) (centerPointx - sidex);
+            newcoordy = (int) (centerPointy - sidey - 198);
+        }
+
+        if(firstx >= centerPointx && firsty <= centerPointy)
+        {
+            newcoordx = (int) (centerPointx + sidex);
+            newcoordy = (int) (centerPointy - sidey - 198);
+        }
+
+        if(firstx < centerPointx && firsty > centerPointy)
+        {
+            newcoordx = (int) (centerPointx - sidex);
+            newcoordy = (int) (centerPointy + sidey - 198);
+        }
+
+        if(firstx > centerPointx && firsty > centerPointy)
+        {
+            newcoordx = (int) (centerPointx + sidex);
+            newcoordy = (int) (centerPointy + sidey - 198);
+        }
+        Log.d(TAG, "coords to return: " + newcoordx + " " + newcoordy);
+        coordarray[0] = newcoordx;
+        coordarray[1] = newcoordy;
         return coordarray;
     }
 
