@@ -218,7 +218,7 @@ public class mapOfUnderstanding extends AppCompatActivity {
         ZoomOutButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 zoomLevel /= 1.2;
-                /*
+/*
                 screen.setCtlx((int)(screen.getCtlx() * zoomLevel));
                 screen.setCtly((int)(screen.getCtly() * zoomLevel));
                 screen.setCtrx((int)(screen.getCtrx() * zoomLevel));
@@ -227,7 +227,7 @@ public class mapOfUnderstanding extends AppCompatActivity {
                 screen.setCbly((int)(screen.getCbly() * zoomLevel));
                 screen.setCbrx((int)(screen.getCbrx() * zoomLevel));
                 screen.setCbry((int)(screen.getCbry() * zoomLevel));
-                */
+*/
                 txtzoomlvl.setText(String.valueOf(zoomLevel));
                 removeAllViews(viewGroup);
                 regenerateViews(screen, viewGroup, coordinatorLayoutInMap);
@@ -316,12 +316,13 @@ public class mapOfUnderstanding extends AppCompatActivity {
                         conceptList.add(conceptModel);
                         final View inflatedConcept = LayoutInflater.from(getApplicationContext()).inflate(R.layout.conceptinmap,viewGroup,false);
                         //persistentdb.conceptDao().insertSingleConcept(conceptModel.getFireBaseId(),conceptModel.getName());
+                        coordarray = calculateNewPosition(screen,(int) conceptModel.getCoordx(),(int) conceptModel.getCoordy());
 
                         //check if the item is within the screen
-                        if(conceptModel.getCoordx()>=screen.getCtlx() && conceptModel.getCoordy()>=screen.getCtly() &&
-                                conceptModel.getCoordx()<=screen.getCtrx() && conceptModel.getCoordy()>=screen.getCtry() &&
-                                conceptModel.getCoordx()>=screen.getCblx() && conceptModel.getCoordy()<=screen.getCbly() &&
-                                conceptModel.getCoordx()<=screen.getCbrx() && conceptModel.getCoordy()<=screen.getCbry())
+                        if(coordarray[0]>=screen.getCtlx() && coordarray[1]>=screen.getCtly() &&
+                                coordarray[0]<=screen.getCtrx() && coordarray[1]>=screen.getCtry() &&
+                                coordarray[0]>=screen.getCblx() && coordarray[1]<=screen.getCbly() &&
+                                coordarray[0]<=screen.getCbrx() && coordarray[1]<=screen.getCbry())
                         {
                             addToExistingTouchListener(inflatedConcept,coordinatorLayoutInMap, screen);
                             inflatedConcept.setId(Integer.valueOf(conceptModel.getFireBaseId()));
@@ -330,7 +331,6 @@ public class mapOfUnderstanding extends AppCompatActivity {
                             viewGroup.addView(inflatedConcept);
                             inflatedConcept.setX((long)document.get("coordx")- screen.getCtlx());
                             inflatedConcept.setY((long)document.get("coordy")- screen.getCtly() - 198);
-                            coordarray = calculateNewPosition(screen,(int) conceptModel.getCoordx(),(int) conceptModel.getCoordy());
                             Log.d(TAG,"elements of coordarray: " + coordarray[0] + " " + coordarray[1]);
                             inflatedConcept.setX(coordarray[0]- screen.getCtlx());
                             inflatedConcept.setY(coordarray[1]- screen.getCtly() - 198);
