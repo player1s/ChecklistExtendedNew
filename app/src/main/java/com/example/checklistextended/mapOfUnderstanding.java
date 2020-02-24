@@ -218,16 +218,6 @@ public class mapOfUnderstanding extends AppCompatActivity {
         ZoomOutButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 zoomLevel /= 1.2;
-/*
-                screen.setCtlx((int)(screen.getCtlx() * zoomLevel));
-                screen.setCtly((int)(screen.getCtly() * zoomLevel));
-                screen.setCtrx((int)(screen.getCtrx() * zoomLevel));
-                screen.setCtry((int)(screen.getCtry() * zoomLevel));
-                screen.setCblx((int)(screen.getCblx() * zoomLevel));
-                screen.setCbly((int)(screen.getCbly() * zoomLevel));
-                screen.setCbrx((int)(screen.getCbrx() * zoomLevel));
-                screen.setCbry((int)(screen.getCbry() * zoomLevel));
-*/
                 txtzoomlvl.setText(String.valueOf(zoomLevel));
                 removeAllViews(viewGroup);
                 regenerateViews(screen, viewGroup, coordinatorLayoutInMap);
@@ -237,54 +227,60 @@ public class mapOfUnderstanding extends AppCompatActivity {
         final FloatingActionButton fabInMap = (FloatingActionButton) findViewById(R.id.fabInMap);
         fabInMap.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                final View inflatedConcept = LayoutInflater.from(getApplicationContext()).inflate(R.layout.conceptinmap,viewGroup,false);
-                int generatedId = View.generateViewId();
-                inflatedConcept.setId(generatedId);
-                Log.d(TAG,"Generated View: " + inflatedConcept.getId());
-                inflatedElements.add(inflatedConcept);
-                final conceptModel conceptModel = new conceptModel();
-                conceptModel.setId(generatedId);
-                conceptModel.setFireBaseId(Integer.toString(generatedId));
-                Map map = conceptModel.createMap();
-                conceptList.add(conceptModel);
-                db.collection("users").document("gQprmC2uxhPBXfV8uMxa")
-                        .collection("MapOfUnderstanding").document(Integer.toString(conceptModel.getId()))
-                        .set(map)
-                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                Log.d(TAG, "DocumentSnapshot successfully written!");
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Log.w(TAG, "Error writing document", e);
+                if (zoomLevel > 0.9 && zoomLevel < 1.1) {
+                    final View inflatedConcept = LayoutInflater.from(getApplicationContext()).inflate(R.layout.conceptinmap, viewGroup, false);
+                    int generatedId = View.generateViewId();
+                    inflatedConcept.setId(generatedId);
+                    Log.d(TAG, "Generated View: " + inflatedConcept.getId());
+                    inflatedElements.add(inflatedConcept);
+                    final conceptModel conceptModel = new conceptModel();
+                    conceptModel.setId(generatedId);
+                    conceptModel.setFireBaseId(Integer.toString(generatedId));
+                    Map map = conceptModel.createMap();
+                    conceptList.add(conceptModel);
+                    db.collection("users").document("gQprmC2uxhPBXfV8uMxa")
+                            .collection("MapOfUnderstanding").document(Integer.toString(conceptModel.getId()))
+                            .set(map)
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    Log.d(TAG, "DocumentSnapshot successfully written!");
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.w(TAG, "Error writing document", e);
+                                }
+                            });
+
+
+                    addToExistingTouchListener(inflatedConcept, coordinatorLayoutInMap, screen);
+                    viewGroup.addView(inflatedConcept);
+
+
+                    if (inflatedConcept instanceof ViewGroup) {
+                        Log.d(TAG, "Generated View is part of viewgroup " + inflatedConcept.getId());
+                        ViewGroup viewGroup = (ViewGroup) inflatedConcept;
+                        Button buttonOfChildConcept = (Button) viewGroup.getChildAt(0);
+                        buttonOfChildConcept.setOnClickListener(new View.OnClickListener() {
+                            public void onClick(View v) {
+                                Intent intent = new Intent(v.getContext(), ConceptDetails.class);
+                                intent.putExtra("baseInfo", conceptModel);
+                                startActivity(intent);
                             }
                         });
+                        for (int i = 0; i < viewGroup.getChildCount(); ++i) {
+                            Log.d(TAG, "Started looking through the children of: " + inflatedConcept.getId());
+                            View child = viewGroup.getChildAt(i);
 
-
-                addToExistingTouchListener(inflatedConcept,coordinatorLayoutInMap, screen);
-                viewGroup.addView(inflatedConcept);
-
-
-                if (inflatedConcept instanceof ViewGroup) {
-                    Log.d(TAG,"Generated View is part of viewgroup " + inflatedConcept.getId());
-                    ViewGroup viewGroup = (ViewGroup) inflatedConcept;
-                    Button buttonOfChildConcept = (Button) viewGroup.getChildAt(0);
-                    buttonOfChildConcept.setOnClickListener(new View.OnClickListener() {
-                        public void onClick(View v) {
-                            Intent intent = new Intent(v.getContext(), ConceptDetails.class);
-                            intent.putExtra("baseInfo", conceptModel);
-                            startActivity(intent);
+                            // Edit the child
                         }
-                    });
-                    for(int i = 0; i< viewGroup.getChildCount(); ++i) {
-                        Log.d(TAG,"Started looking through the children of: " + inflatedConcept.getId());
-                        View child = viewGroup.getChildAt(i);
-
-                        // Edit the child
                     }
+                }
+                else
+                {
+                    Toast.makeText(getApplicationContext(), "add a new item on zoom level 1 ", Toast.LENGTH_SHORT).show();
                 }
             }
         });
